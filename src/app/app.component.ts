@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   loading$!: Observable<boolean>;
   loading = false;
   loadingSubscription!: Subscription;
-  title: string = 'ngrx-data-template';
+  title: string = 'angular-material-ngrx-data-template';
 
   constructor(private translate: TranslateService, private router: Router, private loadinSpinnerService: LoadingSpinnerService, private departmentService: DepartmentService,
     private authService: AuthService, private cdRef: ChangeDetectorRef, private messageService: MessageService, route: ActivatedRoute, oidcUserService: OidcUserService) {

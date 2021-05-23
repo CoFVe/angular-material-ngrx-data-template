@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngrx-data-template": {
+    "angular-material-ngrx-data-template": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngrx-data-template",
+            "outputPath": "dist/angular-material-ngrx-data-template",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -79,21 +79,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngrx-data-template:build"
+            "browserTarget": "angular-material-ngrx-data-template:build"
           },
           "configurations": {
             "local": {
-              "browserTarget": "ngrx-data-template:build:local"
+              "browserTarget": "angular-material-ngrx-data-template:build:local"
             },
             "production": {
-              "browserTarget": "ngrx-data-template:build:production"
+              "browserTarget": "angular-material-ngrx-data-template:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngrx-data-template:build"
+            "browserTarget": "angular-material-ngrx-data-template:build"
           }
         },
         "test": {
@@ -130,16 +130,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ngrx-data-template:serve"
+            "devServerTarget": "angular-material-ngrx-data-template:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ngrx-data-template:serve:production"
+              "devServerTarget": "angular-material-ngrx-data-template:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "ngrx-data-template"
+  "defaultProject": "angular-material-ngrx-data-template"
 }
