@@ -1,0 +1,59 @@
+<div id="sidebar" [ngClass]="{'side-collapsed': collapsed === true}">
+
+
+  <div fxLayout="column" fxFill>
+
+    <mat-nav-list fxLayout="column" fxFlex>
+      <mat-list-item [routerLinkActive]="'active'" [routerLink]="['/people']">
+
+        <button type="button" mat-icon-button matTooltip="{{ collapsed ? ('People' | translate) : ''}}" matTooltipClass='black-tooltip'>
+          <mat-icon class="sidenav-icon">people</mat-icon>
+          <span>{{ !collapsed ? ('People' | translate) : ''}}</span>
+        </button>
+
+      </mat-list-item>
+
+      <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
+        <mat-list-item [routerLinkActive]="'active'" [routerLink]="['/departments']">
+
+          <button type="button" mat-icon-button matTooltip="{{ collapsed ? ('Departments' | translate) : ''}}" matTooltipClass='black-tooltip'>
+            <mat-icon class="sidenav-icon">groups</mat-icon>
+            <span>{{ !collapsed ? ('Departments' | translate) : ''}}</span>
+          </button>
+
+        </mat-list-item>
+      </ng-template>
+      <mat-divider></mat-divider>
+
+      <span fxFlex></span>
+
+      <mat-divider></mat-divider>
+
+      <mat-list-item [routerLinkActive]="'active'" [routerLink]="['/about']">
+        <span [ngStyle]="{'width': collapsed === true ? '40px;' : '190px;'}" style="text-align:left;" >
+          <button type="button" mat-icon-button matTooltip="{{ collapsed ? ('About' | translate) : ''}}" matTooltipClass='black-tooltip'>
+            <mat-icon class="sidenav-icon">info</mat-icon>
+            <span>{{ !collapsed ? ('About' | translate) : ''}}</span>
+          </button>
+        </span>
+
+        <span class="nav-spacer"></span>
+        <button *ngIf="!collapsed" type="button" mat-icon-button matTooltip="{{('Collapse' | translate)}}" matTooltipClass='black-tooltip' (click)="toggleCollapse($event);$event.stopPropagation();">
+          <mat-icon class="sidenav-icon icon-flipped">double_arrow</mat-icon>
+        </button>
+
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item *ngIf="collapsed" (click)="toggleCollapse($event)">
+        <button type="button" mat-icon-button matTooltip="{{ ('Expand' | translate) }}" matTooltipClass='black-tooltip'>
+          <mat-icon class="sidenav-icon" style="margin: 0 0 0 -5px;">double_arrow</mat-icon>
+        </button>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </div>
+
+
+
+</div>

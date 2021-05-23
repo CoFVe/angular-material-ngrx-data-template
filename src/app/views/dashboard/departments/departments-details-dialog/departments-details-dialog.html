@@ -1,0 +1,5 @@
+<div mat-dialog-content>
+  <h4>{{'New Department' | translate}}</h4>
+  <departments-editor (isEdited)="save($event)" [entity]="currentEntity">
+  </departments-editor>
+</div>

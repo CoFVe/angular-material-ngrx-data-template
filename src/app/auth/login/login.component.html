@@ -1,0 +1,8 @@
+<form>
+  <div>
+    <h2 class="app-name">Sample App</h2>
+    <div *ngIf="isLoginVisible">
+      <button mat-raised-button color="accent" class="w-100" (click)="onLogin()">{{'Login' | translate}}</button>
+    </div>
+  </div>
+</form>

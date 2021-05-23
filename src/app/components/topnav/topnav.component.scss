@@ -1,0 +1,89 @@
+:host {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+.nav-brand {
+    width: 215px;
+    img {
+      height: 50px;
+    }
+
+}
+.topnav-icon {
+    text-decoration: none;
+    display: flex;
+    color: #fff;
+}
+
+.visible-md {
+    display: none;
+}
+.visible-sm {
+    display: none;
+}
+
+  @media screen and (max-width: 992px) {
+    .visible-md {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .visible-sm {
+      display: block;
+    }
+
+    .nav-brand {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .hidden-sm {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .hidden-xsm {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 440px) {
+    .head-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 225px;
+      display: inline-block;
+      margin: 0 0 -8px 0;
+      vertical-align: baseline;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .head-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 190px;
+      display: inline-block;
+      margin: 0 0 -8px 0;
+      vertical-align: baseline;
+    }
+  }
+
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    padding: 0 5px !important;
+
+}
+
+.mat-icon-button {
+    margin-bottom: 5px;
+}

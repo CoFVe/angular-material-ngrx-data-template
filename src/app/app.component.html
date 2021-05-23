@@ -1,0 +1,6 @@
+<!-- indicate that a router module is being loaded asynchronously. -->
+<!-- <div class="router-loading" *ngIf="!!loading && loading === true">
+  <mat-spinner color="accent"></mat-spinner>
+</div> -->
+<loading-spinner size="100" [loading$]="loading$" class="router-loading"></loading-spinner>
+<router-outlet></router-outlet>

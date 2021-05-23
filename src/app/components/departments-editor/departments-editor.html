@@ -1,0 +1,34 @@
+<form #form="ngForm">
+
+  <div fxflex>
+    <div fxflex>
+      <mat-form-field >
+        <mat-label>{{'Id' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.id" name="id" required [disabled]="!enableEdit" >
+      </mat-form-field>
+    </div>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.name" name="name" required [disabled]="!enableEdit">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="dialog-buttons">
+    <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
+      <mat-slide-toggle
+        *ngIf="!!originalEntity?.id"
+        [checked]="enableEdit"
+        (change)="toggleEdit()"
+      >
+        Edit
+      </mat-slide-toggle>
+      <button *ngIf="!!originalEntity?.id" mat-icon-button (click)="openConfirmationDialog()" matTooltip="{{'Delete' | translate}}" matTooltipClass='black-tooltip' [disabled]="!enableEdit">
+        <mat-icon aria-label="Delete">delete</mat-icon>
+      </button>
+      <button mat-raised-button color="accent" type="button" [disabled]="!form.valid" (click)="save()">{{'Ok' | translate}}</button>
+    </ng-template>
+    <button mat-raised-button color="accent" type="button" (click)="onNoClick()">{{'Cancel' | translate}}</button>
+  </div>
+</form>

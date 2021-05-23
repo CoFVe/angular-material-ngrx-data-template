@@ -1,0 +1,63 @@
+<form #form="ngForm">
+
+  <div fxflex>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.name" name="name" required [disabled]="!enableEdit">
+      </mat-form-field>
+    </div>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Email' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.email" name="email" required [disabled]="!enableEdit">
+      </mat-form-field>
+    </div>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Department' | translate}}</mat-label>
+        <mat-select [(value)]="entity.departmentId" required [disabled]="!enableEdit">
+          <mat-option *ngFor="let department of (departments$ | async)" [value]="department.id">
+            {{department.name}}
+          </mat-option>
+      </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Avatar' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.avatar" name="avatar" required [disabled]="!enableEdit">
+      </mat-form-field>
+    </div>
+    <div fxflex>
+      <mat-form-field>
+        <mat-label>{{'Phone' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.phone" name="phone" required [disabled]="!enableEdit">
+      </mat-form-field>
+    </div>
+    <div fxflex *ngIf="!!entity?.id">
+      <mat-form-field >
+        <mat-label>{{'Id' | translate}}</mat-label>
+        <input matInput [(ngModel)]="entity.id" name="id" readonly disabled>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="dialog-buttons">
+
+    <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
+      <mat-slide-toggle
+        *ngIf="!!entity?.id"
+        [checked]="enableEdit"
+        (change)="toggleEdit()"
+      >
+      Edit
+      </mat-slide-toggle>
+      <button *ngIf="!!entity?.id" mat-icon-button (click)="openConfirmationDialog()" matTooltip="{{'Delete' | translate}}" matTooltipClass='black-tooltip' [disabled]="!enableEdit">
+        <mat-icon aria-label="Delete">delete</mat-icon>
+      </button>
+      <button mat-raised-button color="accent" type="button" [disabled]="!form.valid" (click)="save()">{{'Ok' | translate}}</button>
+    </ng-template>
+    <button mat-raised-button color="accent" type="button" (click)="onNoClick()">{{'Cancel' | translate}}</button>
+  </div>
+</form>

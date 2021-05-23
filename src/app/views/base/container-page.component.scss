@@ -1,0 +1,52 @@
+.container-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  .content {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:after {
+    content: '';
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 50%;
+    right: 0;
+  }
+
+  &:before {
+    content: '';
+    background: var(--bright-orange);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.mat-icon {
+  font-size: 250px;
+  margin: -150px 200px 0 0;
+}
+
+.message {
+  font-size: 50px;
+  margin: 50px 0 0 0;
+}

@@ -1,0 +1,31 @@
+<mat-toolbar class="fix-nav">
+  <h4>Departments</h4>
+  <span class="nav-spacer"></span>
+  <button mat-raised-button matTooltip="{{ windowWidth() < 769 ? 'department' : ''}}" matTooltipClass='black-tooltip' fxLayoutAlign="center center" color="accent" (click)="openDialog('DepartmentDetails')">
+    <mat-icon>add</mat-icon>
+    <span class="hidden-sm">{{'Department'}}</span>
+  </button>
+</mat-toolbar>
+
+<div class="mb-20" flFlex flexLayout="row" flexLayout.lt-md="column">
+  <div fxFlex>
+
+    <table mat-table [dataSource]="dataSource$" class="table">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef disableClear>Id</th>
+        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog('DepartmentDetails',row)" class="mat-table-item"></tr>
+
+    </table>
+
+  </div>
+</div>

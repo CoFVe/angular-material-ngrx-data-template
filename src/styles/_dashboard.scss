@@ -1,0 +1,68 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto';
+}
+
+.main-container-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  .content {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:after {
+    content: '';
+    background: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 50%;
+    right: 0;
+  }
+
+  &:before {
+    content: '';
+    background: var(--bright-orange);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.main-container {
+  position: absolute;
+  top: 64px;
+  left: 250px;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+}
+
+.main-container-collapsed {
+  position: absolute;
+  top: 64px;
+  left: 55px;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+}
+

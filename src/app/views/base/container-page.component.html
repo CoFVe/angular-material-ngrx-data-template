@@ -1,0 +1,7 @@
+<div [ngClass]="{'push-right': pushRight,'main-body': !!user }">
+  <app-topnav (onSidebarToggled)="expandSidebar()"></app-topnav>
+  <app-sidebar *ngIf="!!user" (onSidebarCollaped)="toogleExpandMainContainer()"></app-sidebar>
+  <div [ngClass]="{'main-container-collapsed': expanded === false && !!user, 'main-container' : !!user && expanded === true }">
+      <ng-content></ng-content>
+  </div>
+</div>

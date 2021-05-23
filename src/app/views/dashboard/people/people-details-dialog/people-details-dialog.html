@@ -1,0 +1,5 @@
+<div mat-dialog-content>
+  <h4>{{'New Person' | translate}}</h4>
+  <people-editor (isEdited)="save($event)" [entity]="currentEntity">
+  </people-editor>
+</div>
