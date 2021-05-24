@@ -10,10 +10,14 @@ import { PaginationService } from '@/app/services/pagination.service';
 import { PaginationModel } from '@/app/models/pagination.model';
 import { PeopleDetailsDialogComponent } from './people-details-dialog/people-details-dialog.component';
 import { Observable } from 'rxjs';
-import { first, map, take, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
+import { MessageService } from 'primeng/api';
+import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinner.service';
+import { ConfirmationDialogComponent } from '@/app/components/confirmation-dialog/confirmation-dialog.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-people',
+  selector: 'people-list',
   templateUrl: './people.component.html',
   styleUrls: ['./people.component.scss']
 })
@@ -21,30 +25,30 @@ import { first, map, take, tap } from 'rxjs/operators';
 export class PeopleComponent extends PageBaseComponent implements AfterViewInit {
   dataSource$!: Observable<PeopleModel[]>;
 
-  displayedColumns = ['id','name','email'];
+  displayedColumns = ['id','name','email','table-options'];
   pageLength!: number;
 
   isLoadingResults = true;
   isRateLimitReached = false;
-  private areEntitiesLoaded = false;
+  private isDetails!: boolean;
+  detailsEntity!: PeopleModel;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(injector: Injector, public entityService: PeopleService, private paginationService: PaginationService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog, private messageService: MessageService, private loadingSpinner: LoadingSpinnerService) {
     super(injector);
+    this.isDetails = !!this.activatedRoute.snapshot.params.id;
+    if (this.isDetails)
+    this.detailsEntity = this.activatedRoute.snapshot.data.person as PeopleModel;
   }
 
   ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    const currentEntityId = this.activatedRoute.snapshot.params.id;
-    if(!!currentEntityId) {
 
-      this.entityService.getByKey(currentEntityId).subscribe((currentEntity: PeopleModel)=>{
-        this.openDialog('PeopleDetails', currentEntity);
-      });
-
+    if(this.isDetails) {
+      this.openDialog('PeopleDetails', this.detailsEntity);
     } else {
       this.loadEntities();
     }
@@ -57,9 +61,9 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
         const dialogRef = this.dialog.open(PeopleDetailsDialogComponent, {
           data: currentEntity
         });
-        dialogRef.afterClosed().subscribe(()=>{
+        dialogRef.afterClosed().pipe(first()).subscribe(()=>{
           window.history.replaceState({}, '',`/people`);
-          if (!this.areEntitiesLoaded) {
+          if (this.isDetails) {
             this.changePage();
           }
         });
@@ -95,7 +99,30 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
       this.pageLength = pagination?.length || 0;
     });
     this.dataSource$ = this.entityService.entities$.pipe(map(entities => entities.slice(0, this.paginator.pageSize)));
-    this.areEntitiesLoaded = true;
+  }
+
+  openDeleteConfirmation(person: PeopleModel): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: 'Do you confirm deleting ' + person.name + '?',
+      width: '410px'
+    });
+
+    dialogRef.afterClosed().subscribe((answer: boolean) => {
+      if (answer) {
+        this.delete(person);
+      }
+    });
+  }
+
+  delete(person: PeopleModel) {
+    this.entityService.delete(person).subscribe(() => {
+        this.loadingSpinner.removeLoading();
+        this.messageService.add({ severity: 'info', detail: 'person deleted' });
+      }, (error: HttpErrorResponse) => {
+        this.loadingSpinner.removeLoading();
+        this.messageService.add({ severity: 'error', detail: 'error deleting person: ' + person.name, life: 6000 });
+        this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+      });
   }
 
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PeopleDetailsResolver } from './people-details-dialog/people-details.resolver';
 import { PeopleComponent } from './people.component';
 import { PeopleResolver } from './people.resolver';
 
@@ -8,12 +9,15 @@ const routes: Routes = [
     path: '',
     component: PeopleComponent,
     resolve: {
-      applications: PeopleResolver
+      people: PeopleResolver
     }
   },
   {
     path: 'details/:id',
-    component: PeopleComponent
+    component: PeopleComponent,
+    resolve: {
+      person: PeopleDetailsResolver
+    }
   }
 ];
 

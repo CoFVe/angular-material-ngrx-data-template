@@ -31,8 +31,21 @@
         <td mat-cell *matCellDef="let row">{{row.email}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="table-options" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+
+          <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
+            <button mat-icon-button matTooltip="{{'delete' | translate}}" color="accent" (click)="$event.stopPropagation();openDeleteConfirmation(row);">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </ng-template>
+
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="changeLocation('PeopleDetails',row)" class="mat-table-item"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" matTooltip="{{row.name}}" (click)="changeLocation('PeopleDetails',row)" class="mat-table-item"></tr>
 
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="pageLength" showFirstLastButtons (page)="changePage()"></mat-paginator>

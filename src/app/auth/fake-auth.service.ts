@@ -42,7 +42,7 @@ export class AuthService  {
             given_name: "user_given_name",
             family_name: "user_family_name",
             nickname: "user_nickname",
-            roles: 'reader'
+            roles: 'Administrator'
           } as unknown as Profile
         } as User;
         this.entityService.add( { ...this.user } as unknown as User);
@@ -61,7 +61,7 @@ export class AuthService  {
   isAuthenticated(): boolean {
     let result = (!!this.user) && !!!this.user?.expired;
     if (result)
-      this.loadRoles(this.user.profile.roles);
+      this.loadRoles(this.user);
     return result;
   }
 
@@ -87,8 +87,7 @@ export class AuthService  {
   }
 
   loadRoles(user: User | any) {
-    let roles = user?.profile?.roles.split(',') || ['Administrator'];
-    roles = [...roles];
+    let roles = [...user?.profile?.roles.split(',')] || ['Administrator'];
     this.permissionsService.loadPermissions(roles);
   }
 

@@ -48,7 +48,8 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
 
   openConfirmationDialog(): void {
     const dialogRef = this.confirmDialog.open(ConfirmationDialogComponent, {
-      width: '250px'
+      data: 'Do you confirm deleting ' + this.entity.name + '?',
+      width: '410px'
     });
 
     dialogRef.afterClosed().subscribe(answer => {

@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: DepartmentsComponent,
     resolve: {
-      applications: DepartmentsResolver
+      departments: DepartmentsResolver
     }
   }
 ];

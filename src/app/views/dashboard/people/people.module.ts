@@ -16,12 +16,14 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSelectModule } from '@angular/material/select';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { PeopleDetailsDialogComponent } from './people-details-dialog/people-details-dialog.component';
 import { PeopleEditorModule } from '@/app/components/people-editor/people-editor.module';
 import { LoadingSpinnerModule } from '@/app/components/loading-spinner/loading-spinner.module';
+import { PeopleDetailsResolver } from './people-details-dialog/people-details.resolver';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 @NgModule({
   imports: [
@@ -45,13 +47,14 @@ import { LoadingSpinnerModule } from '@/app/components/loading-spinner/loading-s
     ReactiveFormsModule,
     MatSortModule,
     PeopleEditorModule,
-    LoadingSpinnerModule
+    LoadingSpinnerModule,
+    NgxPermissionsModule
   ],
   declarations: [ PeopleComponent, PeopleDetailsDialogComponent ],
   providers: [
-    PeopleResolver
+    PeopleResolver, PeopleDetailsResolver
   ],
-  entryComponents:[PeopleDetailsDialogComponent]
+  entryComponents:[ PeopleDetailsDialogComponent ]
 })
 export class PeopleModule {
 }

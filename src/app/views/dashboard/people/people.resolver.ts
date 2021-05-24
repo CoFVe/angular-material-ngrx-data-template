@@ -11,16 +11,12 @@ import { DepartmentService } from '@/app/services/department.service';
 export class PeopleResolver implements Resolve<boolean> {
 
   constructor(private entityService: PeopleService, private departmentService: DepartmentService, loadingSpinner: LoadingSpinnerService) {
-    let loadingCount = 0;
     this.entityService.loaded$.pipe(tap(loaded => {
       if (!loaded) {
-        loadingCount++;
         loadingSpinner.addLoading();
       }
       else {
-        for (let i = 0; i < loadingCount; i++)
         loadingSpinner.removeLoading();
-        loadingCount = 0;
       }
     }),
       first()
