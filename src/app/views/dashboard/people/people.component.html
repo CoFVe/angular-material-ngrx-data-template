@@ -1,16 +1,15 @@
 <mat-toolbar class="fix-nav">
   <h4>People</h4>
   <span class="nav-spacer"></span>
-  <button mat-raised-button matTooltip="{{ windowWidth() < 769 ? 'person' : ''}}" matTooltipClass='black-tooltip' fxLayoutAlign="center center" color="accent" (click)="openDialog('PeopleDetails')">
+  <table-updater [tableComponent]="this" updaterFunctionName="changePage"></table-updater>
+  <button mat-raised-button matTooltip="{{ windowWidth() < 769 ? 'person' : ''}}" fxLayoutAlign="center center" color="accent" (click)="openDialog('PeopleDetails')">
     <mat-icon>add</mat-icon>
     <span class="hidden-sm">{{'People'}}</span>
   </button>
 </mat-toolbar>
 
 <div>
-
     <loading-spinner size="100" [loading$]="entityService.loading$" class="center"></loading-spinner>
-
 
     <table mat-table [dataSource]="dataSource$" class="table" matSort
            matSortActive="id" matSortDisableClear matSortDirection="desc"

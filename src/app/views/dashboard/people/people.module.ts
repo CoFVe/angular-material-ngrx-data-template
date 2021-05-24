@@ -24,6 +24,7 @@ import { PeopleEditorModule } from '@/app/components/people-editor/people-editor
 import { LoadingSpinnerModule } from '@/app/components/loading-spinner/loading-spinner.module';
 import { PeopleDetailsResolver } from './people-details-dialog/people-details.resolver';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { TableUpdaterModule } from '@/app/components/table-updater/table-updater.module';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     MatSortModule,
     PeopleEditorModule,
     LoadingSpinnerModule,
-    NgxPermissionsModule
+    NgxPermissionsModule,
+    TableUpdaterModule
   ],
   declarations: [ PeopleComponent, PeopleDetailsDialogComponent ],
   providers: [
