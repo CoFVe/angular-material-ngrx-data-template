@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Profile, User } from 'oidc-client';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { OidcUserService } from '../services/oidc-user.service';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { first } from 'rxjs/operators';
@@ -17,7 +16,7 @@ export class AuthService  {
 
   public user!: User | any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private entityService: OidcUserService, private permissionsService: NgxPermissionsService, private messageService: MessageService) {
+  constructor(private router: Router, private route: ActivatedRoute, private entityService: OidcUserService, private permissionsService: NgxPermissionsService) {
     this.entityService.getAll().pipe(first()).subscribe((oidcUsers: User[] | any) => {
       if (!!oidcUsers[0]) {
         this.user = {...oidcUsers[0]};

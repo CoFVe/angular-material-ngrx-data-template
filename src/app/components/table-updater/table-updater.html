@@ -1,7 +1,7 @@
 <button mat-icon-button matTooltip="refresh" fxLayoutAlign="center center" color="accent" (click)="executeUpdate()">
   <mat-icon>refresh</mat-icon>
 </button>
-<mat-label *ngIf="selectedValue != '0'">auto update </mat-label>
+<mat-label *ngIf="selectedValue != '0'">auto update every </mat-label>
 <mat-form-field>
 
   <mat-select [(value)]="selectedValue" (selectionChange)="selectChange()">
@@ -9,7 +9,7 @@
       no autoupdate
     </mat-option>
     <mat-option *ngFor="let minute of minutes" [value]="minute">
-      every {{minute}} {{minute === 1 ? 'minute' : 'minutes'}}
+      {{minute}} {{minute === 1 ? 'minute' : 'minutes'}}
     </mat-option>
   </mat-select>
 </mat-form-field>

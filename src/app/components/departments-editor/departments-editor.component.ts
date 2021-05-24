@@ -4,9 +4,9 @@ import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Output, EventEmitter, OnDestroy, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@components/confirmation-dialog/confirmation-dialog.component';
+import { NotificationService } from '@components/notification-message/notification.service';
 
 @Component({
   selector: 'departments-editor',
@@ -21,7 +21,7 @@ export class DepartmentsEditorComponent implements OnDestroy, OnInit {
   originalEntity!: DepartmentModel;
   departments$!: Observable<DepartmentModel[]>;
 
-  constructor(private entityService: DepartmentService, private messageService: MessageService,
+  constructor(private entityService: DepartmentService, private notificationService: NotificationService,
     private loadingSpinner: LoadingSpinnerService, public confirmDialog: MatDialog){
   }
 
@@ -58,22 +58,20 @@ export class DepartmentsEditorComponent implements OnDestroy, OnInit {
       this.subscriptions.push(
         this.entityService.add({ ...this.entity }).subscribe((resultEntity) => {
           this.loadingSpinner.removeLoading();
-          this.messageService.add({ severity: 'info', detail: resultEntity.name + ' added' });
+          this.notificationService.show({ severity: 'info', detail: resultEntity.name + ' added' });
         }, (error: HttpErrorResponse) => {
           this.loadingSpinner.removeLoading();
-          this.messageService.add({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 6000 });
-          this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+          this.notificationService.show({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 6000 });
         })
       );
     } else {
       this.subscriptions.push(
         this.entityService.upsert({ ...this.entity }).subscribe((resultEntity) => {
           this.loadingSpinner.removeLoading();
-          this.messageService.add({ severity: 'info', detail: resultEntity.name + ' updated' });
+          this.notificationService.show({ severity: 'info', detail: resultEntity.name + ' updated' });
         }, (error: HttpErrorResponse) => {
           this.loadingSpinner.removeLoading();
-          this.messageService.add({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 6000 });
-          this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+          this.notificationService.show({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 6000 });
         })
       );
     }
@@ -93,11 +91,10 @@ export class DepartmentsEditorComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.entityService.delete(this.entity).subscribe(() => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'info', detail: 'department deleted' });
+        this.notificationService.show({ severity: 'info', detail: 'department deleted' });
       }, (error: HttpErrorResponse) => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'error', detail: 'error deleting department: ' + this.entity.name, life: 6000 });
-        this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+        this.notificationService.show({ severity: 'error', detail: 'error deleting department: ' + this.entity.name, life: 6000 });
       })
     );
     this.isEdited.emit(this.entity);

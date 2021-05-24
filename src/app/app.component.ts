@@ -5,7 +5,6 @@ import { filter, first, tap } from 'rxjs/operators';
 import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-spinner.service';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '@app/auth/auth.service';
-import { MessageService } from 'primeng/api';
 import { OidcUserService } from './services/oidc-user.service';
 import { DepartmentService } from './services/department.service';
 
@@ -21,7 +20,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   title: string = 'angular-material-ngrx-data-template';
 
   constructor(private translate: TranslateService, private router: Router, private loadinSpinnerService: LoadingSpinnerService, private departmentService: DepartmentService,
-    private authService: AuthService, private cdRef: ChangeDetectorRef, private messageService: MessageService, route: ActivatedRoute, oidcUserService: OidcUserService) {
+    private authService: AuthService, private cdRef: ChangeDetectorRef, route: ActivatedRoute, oidcUserService: OidcUserService) {
     this.loading$ = this.loadinSpinnerService.loading$;
 
     oidcUserService.loaded$.pipe(tap(loaded => {
@@ -84,10 +83,6 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
         }
       }
     });
-  }
-
-  onClose() {
-    this.messageService.clear('messageDialog');
   }
 
   ngAfterViewChecked() {

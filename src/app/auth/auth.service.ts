@@ -4,8 +4,7 @@ import { UserManager, User, WebStorageStateStore } from 'oidc-client';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-
+import { NotificationService } from '@/app/components/notification-message/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class AuthService  {
   private manager!: UserManager;
   public user!: User | any;
 
-  constructor(private http: HttpClient, private router: Router, private messageService: MessageService) {
+  constructor(private http: HttpClient, private router: Router, private notificationService: NotificationService) {
     const userStore = new WebStorageStateStore({ store: localStorage });
     const settings = {
       ...environment.msalConfig,
@@ -60,7 +59,7 @@ export class AuthService  {
     this.manager.events.addAccessTokenExpiring(() => {
       this.manager.signinSilent().then(() => {
         this.router.navigate([window.location.pathname]);
-      }).catch((err: string) => this.messageService.add({ severity: 'error', detail: 'failed refreshing user token: ' + err }));
+      }).catch((err: string) => this.notificationService.show({ severity: 'error', detail: 'failed refreshing user token: ' + err }));
     });
   }
 

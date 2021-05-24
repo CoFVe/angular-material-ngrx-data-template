@@ -13,7 +13,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UncaughtExceptionHandler } from './handlers/uncaught-exception.handler';
 import { LoggerService } from '@services/logger.service';
-import { MessageService } from 'primeng/api';
 import { environment } from '@environment';
 import { LoggerModule } from 'ngx-logger';
 import { reducers } from './reducers/app.reducers';
@@ -34,6 +33,8 @@ import { DepartmentStoreModule } from './stores/department-store.module';
 import { LoadingSpinnerService } from './components/loading-spinner/loading-spinner.service';
 import { LoadingSpinnerModule } from './components/loading-spinner/loading-spinner.module';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { NotificationMessageModule } from './components/notification-message/notification-message.module';
+import { NotificationService } from './components/notification-message/notification.service';
 
 @NgModule({
   declarations: [
@@ -83,12 +84,13 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     OidcUserStoreModule,
     MatDialogModule,
     DepartmentStoreModule,
-    LoadingSpinnerModule
+    LoadingSpinnerModule,
+    NotificationMessageModule
   ],
   providers: [
     LoadingSpinnerService,
-    MessageService,
-    { provide: ErrorHandler, useClass: UncaughtExceptionHandler, deps: [LoggerService, MessageService] }
+    NotificationService,
+    { provide: ErrorHandler, useClass: UncaughtExceptionHandler, deps: [LoggerService, NotificationService] }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

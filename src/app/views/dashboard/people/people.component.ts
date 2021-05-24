@@ -11,10 +11,10 @@ import { PaginationModel } from '@/app/models/pagination.model';
 import { PeopleDetailsDialogComponent } from './people-details-dialog/people-details-dialog.component';
 import { Observable } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
-import { MessageService } from 'primeng/api';
 import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinner.service';
 import { ConfirmationDialogComponent } from '@/app/components/confirmation-dialog/confirmation-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '@/app/components/notification-message/notification.service';
 
 @Component({
   selector: 'people-list',
@@ -37,7 +37,7 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(injector: Injector, public entityService: PeopleService, private paginationService: PaginationService,
-    public dialog: MatDialog, private messageService: MessageService, private loadingSpinner: LoadingSpinnerService) {
+    public dialog: MatDialog, private notificationService: NotificationService, private loadingSpinner: LoadingSpinnerService) {
     super(injector);
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
     if (this.isDetails)
@@ -117,11 +117,10 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   delete(person: PeopleModel) {
     this.entityService.delete(person).subscribe(() => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'info', detail: 'person deleted' });
+        this.notificationService.show({ severity: 'info', detail: 'person deleted', life: 4000 });
       }, (error: HttpErrorResponse) => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'error', detail: 'error deleting person: ' + person.name, life: 6000 });
-        this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+        this.notificationService.show({ severity: 'error', detail: 'error deleting person: ' + person.name, life: 4000 });
       });
   }
 

@@ -6,10 +6,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Output, EventEmitter, OnDestroy, Input, OnInit, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PeopleModel } from '@models/people.model';
-import { MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { BaseComponent } from '../base/base.component';
+import { ConfirmationDialogComponent } from '@components/confirmation-dialog/confirmation-dialog.component';
+import { BaseComponent } from '@components/base/base.component';
+import { NotificationService } from '@/app/components/notification-message/notification.service';
 
 @Component({
   selector: 'people-editor',
@@ -25,7 +25,7 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
   departments$!: Observable<DepartmentModel[]>;
 
   constructor(private entityService: PeopleService, private departmentService: DepartmentService,
-    private messageService: MessageService, private loadingSpinner: LoadingSpinnerService,
+    private notificationService: NotificationService, private loadingSpinner: LoadingSpinnerService,
     public confirmDialog: MatDialog, injector: Injector) {
       super(injector);
   }
@@ -67,11 +67,10 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
     this.subscriptions.push(
       this.entityService.upsert({ ...this.entity }).subscribe((resultEntity) => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'info', detail: resultEntity.name + ' updated' });
+        this.notificationService.show({ severity: 'info', detail: resultEntity.name + ' updated', life: 4000 });
       }, (error: HttpErrorResponse) => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 6000 });
-        this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+        this.notificationService.show({ severity: 'error', detail: 'error updating person: ' + this.entity.name, life: 4000 });
       })
     );
     this.isEdited.emit(this.entity);
@@ -90,11 +89,10 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
     this.subscriptions.push(
       this.entityService.delete(this.entity).subscribe(() => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'info', detail: 'person deleted' });
+        this.notificationService.show({ severity: 'info', detail: 'person deleted', life: 4000 });
       }, (error: HttpErrorResponse) => {
         this.loadingSpinner.removeLoading();
-        this.messageService.add({ severity: 'error', detail: 'error deleting person: ' + this.entity.name, life: 6000 });
-        this.messageService.add({ severity: 'error', detail: 'error detail: ' + JSON.stringify(error), life: 6000 });
+        this.notificationService.show({ severity: 'error', detail: 'error deleting person: ' + this.entity.name, life: 4000 });
       })
     );
     this.isEdited.emit(this.entity);

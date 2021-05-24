@@ -1,9 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
-import { MessageService, Message } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LoggerService } from '@services/logger.service';
 import { DictionaryMap } from '@models/base/dictionary-map.type';
+import { NotificationService } from '@/app/components/notification-message/notification.service';
+import { Message } from '@components/notification-message/message';
 
 @Injectable({ providedIn: 'root' })
 export class HttpErrorHandler {
@@ -11,7 +12,7 @@ export class HttpErrorHandler {
 
   onHttpError: EventEmitter<HttpErrorResponse> = new EventEmitter<HttpErrorResponse>();
 
-  constructor(protected messageService: MessageService, private loggerService: LoggerService, private router: Router) {
+  constructor(protected notificationService: NotificationService, private loggerService: LoggerService, private router: Router) {
   }
 
   handle(err: HttpErrorResponse, request: HttpRequest<any>) {
@@ -22,7 +23,7 @@ export class HttpErrorHandler {
 
     switch (err.status) {
       case 401:
-        this.messageService.add({ key: 'messageDialog', severity: 'error', detail: 'Token expired, please renew your user Token', sticky: true, closable: true });
+        this.notificationService.show({ severity: 'error', detail: 'Token expired, please renew your user Token', sticky: true, closable: true });
         return;
     }
     if (err.status === 403) {
@@ -61,7 +62,7 @@ export class HttpErrorHandler {
     }
 
     this.loggerService.error(message.detail || "an error has occurs");
-    this.messageService.add({ ...message/*, life: 3000*/, closable: true });
+    this.notificationService.show({ ...message, closable: true });
   }
 
 }

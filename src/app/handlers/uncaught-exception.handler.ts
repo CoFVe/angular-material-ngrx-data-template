@@ -1,10 +1,11 @@
 import { ErrorHandler } from "@angular/core";
-import { MessageService, Message } from "primeng/api";
 import { LoggerService } from "@services/logger.service";
+import { Message } from "@components/notification-message/message";
+import { NotificationService } from "@/app/components/notification-message/notification.service";
 
 export class UncaughtExceptionHandler implements ErrorHandler
 {
-  constructor(private loggerService: LoggerService, private messageService: MessageService) { }
+  constructor(private loggerService: LoggerService, private notificationService: NotificationService) { }
 
   handleError(err: any) {
     let message: Message = {};
@@ -41,6 +42,6 @@ export class UncaughtExceptionHandler implements ErrorHandler
     }
 
     this.loggerService.error(message.detail || "an error has occurs");
-    this.messageService.add({ detail: 'An unexepected error has occurs, please check logging console for details', closable: true });
+    this.notificationService.show({ detail: 'An unexepected error has occurs, please check logging console for details' } as Message);
   }
 }
