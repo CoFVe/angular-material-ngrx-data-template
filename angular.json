@@ -44,6 +44,10 @@
                 {
                   "replace": "src/app/auth/auth.service.ts",
                   "with": "src/app/auth/fake-auth.service.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
                 }
               ]
             },
