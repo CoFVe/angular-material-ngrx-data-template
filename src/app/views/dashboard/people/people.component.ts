@@ -12,9 +12,9 @@ import { PeopleDetailsDialogComponent } from './people-details-dialog/people-det
 import { Observable } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
 import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinner.service';
-import { ConfirmationDialogComponent } from '@/app/components/confirmation-dialog/confirmation-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
+import { ConfirmationDialogService } from '@/app/components/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'people-list',
@@ -36,7 +36,7 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(injector: Injector, public entityService: PeopleService, private paginationService: PaginationService,
+  constructor(injector: Injector, public entityService: PeopleService, private paginationService: PaginationService, private confirmDialogService: ConfirmationDialogService,
     public dialog: MatDialog, private notificationService: NotificationService, private loadingSpinner: LoadingSpinnerService) {
     super(injector);
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
@@ -64,6 +64,7 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
         dialogRef.afterClosed().pipe(first()).subscribe(()=>{
           window.history.replaceState({}, '',`/people`);
           if (this.isDetails) {
+            this.isDetails = false;
             this.changePage();
           }
         });
@@ -102,16 +103,12 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   }
 
   openDeleteConfirmation(person: PeopleModel): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: 'Do you confirm deleting ' + person.name + '?',
-      width: '410px'
-    });
-
-    dialogRef.afterClosed().subscribe((answer: boolean) => {
-      if (answer) {
-        this.delete(person);
-      }
-    });
+    this.confirmDialogService.open('Do you confirm deleting ' + person.name + '?', '410px')
+      .afterClosed().subscribe((answer: boolean) => {
+        if (answer) {
+          this.delete(person);
+        }
+      });
   }
 
   delete(person: PeopleModel) {

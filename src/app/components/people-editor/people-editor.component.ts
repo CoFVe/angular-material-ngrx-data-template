@@ -4,12 +4,11 @@ import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-
 import { PeopleService } from '@/app/services/people.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Output, EventEmitter, OnDestroy, Input, OnInit, Injector } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { PeopleModel } from '@models/people.model';
 import { Observable, Subscription } from 'rxjs';
-import { ConfirmationDialogComponent } from '@components/confirmation-dialog/confirmation-dialog.component';
 import { BaseComponent } from '@components/base/base.component';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
+import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'people-editor',
@@ -26,7 +25,7 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
 
   constructor(private entityService: PeopleService, private departmentService: DepartmentService,
     private notificationService: NotificationService, private loadingSpinner: LoadingSpinnerService,
-    public confirmDialog: MatDialog, injector: Injector) {
+    public confirmDialogService: ConfirmationDialogService, injector: Injector) {
       super(injector);
   }
 
@@ -47,16 +46,12 @@ export class PeopleEditorComponent extends BaseComponent implements OnDestroy, O
   }
 
   openConfirmationDialog(): void {
-    const dialogRef = this.confirmDialog.open(ConfirmationDialogComponent, {
-      data: 'Do you confirm deleting ' + this.entity.name + '?',
-      width: '410px'
-    });
-
-    dialogRef.afterClosed().subscribe(answer => {
-      if (answer) {
-        this.delete();
-      }
-    });
+    this.confirmDialogService.open('Do you confirm deleting ' + this.entity.name + '?', '410px')
+      .afterClosed().subscribe(answer => {
+        if (answer) {
+          this.delete();
+        }
+      });
   }
 
   onNoClick(): void {

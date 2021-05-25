@@ -2,7 +2,7 @@
 
   <span>{{data.detail}}</span>
   <span class="nav-spacer"></span>
-    <button mat-icon-button color="accent" (click)="snackBarRef.dismiss()">
+    <button *ngIf="data.closable" mat-icon-button (click)="snackBarRef.dismiss()">
         <mat-icon>close</mat-icon>
       </button>
 

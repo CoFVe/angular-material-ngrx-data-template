@@ -23,7 +23,7 @@ export class HttpErrorHandler {
 
     switch (err.status) {
       case 401:
-        this.notificationService.show({ severity: 'error', detail: 'Token expired, please renew your user Token', sticky: true, closable: true });
+        this.notificationService.show({ severity: 'error', detail: 'Token expired, please renew your user Token', closable: true });
         return;
     }
     if (err.status === 403) {

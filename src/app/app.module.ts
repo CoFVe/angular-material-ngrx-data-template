@@ -35,11 +35,11 @@ import { LoadingSpinnerModule } from './components/loading-spinner/loading-spinn
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { NotificationMessageModule } from './components/notification-message/notification-message.module';
 import { NotificationService } from './components/notification-message/notification.service';
+import { ConfirmationDialogModule } from './components/confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ConfirmationDialogComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +85,8 @@ import { NotificationService } from './components/notification-message/notificat
     MatDialogModule,
     DepartmentStoreModule,
     LoadingSpinnerModule,
-    NotificationMessageModule
+    NotificationMessageModule,
+    ConfirmationDialogModule
   ],
   providers: [
     LoadingSpinnerService,
