@@ -17,7 +17,7 @@ export class TableUpdaterComponent implements OnDestroy {
   selectChange(){
     clearInterval(this.intervalId);
     if (parseInt(this.selectedValue) > 0)
-    this.intervalId = setInterval(()=>this.executeUpdate(), parseInt(this.selectedValue) * 1000);
+    this.intervalId = setInterval(()=>this.executeUpdate(), parseInt(this.selectedValue) * 1000 * 60);
   }
 
   executeUpdate() {
