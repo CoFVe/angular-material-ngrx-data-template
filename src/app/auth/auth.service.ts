@@ -6,11 +6,12 @@ import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
 import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
+import { IAuthService } from './auth.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService  {
+export class AuthService implements IAuthService {
 
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   authNavStatus$ = this._authNavStatusSource.asObservable();
@@ -45,14 +46,6 @@ export class AuthService  {
     return (!!this.user) && !!!this.user?.expired;
   }
 
-  get authorizationHeaderValue(): string {
-    return `${this.user?.token_type} ${this.user?.access_token}`;
-  }
-
-  get name(): string {
-    return (this.user !== null && this.user !== undefined)  ? (this.user?.profile?.name || '') : '';
-  }
-
   async logout() {
     await this.manager.signoutRedirect();
   }
@@ -68,4 +61,9 @@ export class AuthService  {
   getRoles() : string[] {
     return this.user?.profile.roles || [""];
   }
+
+  reloadProfile(){
+
+  }
+
 }

@@ -7,11 +7,12 @@ import { NgxPermissionsService } from 'ngx-permissions';
 import { first } from 'rxjs/operators';
 import { ProfilePickerDialogService } from '../components/profile-picker-dialog/profile-picker-dialog.service';
 import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
+import { IAuthService } from './auth.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService  {
+export class AuthService implements IAuthService {
 
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
   authNavStatus$ = this._authNavStatusSource.asObservable();
@@ -52,20 +53,11 @@ export class AuthService  {
     this._authNavStatusSource.next((!!this.user) && !!!this.user?.expired);
   }
 
-
   isAuthenticated(): boolean {
     let result = (!!this.user) && !!!this.user?.expired;
     if (result)
       this.loadRoles(this.user);
     return result;
-  }
-
-  get authorizationHeaderValue(): string {
-    return `${this.user?.token_type} ${this.user?.access_token}`;
-  }
-
-  get name(): string {
-    return (this.user !== null && this.user !== undefined)  ? (this.user?.profile?.name || '') : '';
   }
 
   logout() {
@@ -88,6 +80,22 @@ export class AuthService  {
 
   getRoles() : string[] {
     return this.user?.profile.roles || [""];
+  }
+
+  reloadProfile() {
+    this.profilePickerService.open().afterClosed().pipe(first()).subscribe((userSelected) => {
+      if (!!userSelected){
+        this.entityService.delete(this.user as User).pipe(first()).subscribe(()=>{
+          this.user = null;
+          this.user = { ...userSelected };
+          this.entityService.add( { ...userSelected } as unknown as User).pipe(first()).subscribe(()=>{
+            setInterval(()=>{
+              window.location.href = window.location.href;
+            }, 100);
+          });
+        });
+      }
+    });
   }
 
 }

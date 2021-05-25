@@ -1,13 +1,10 @@
 import { Component, Input, Output, EventEmitter, Injector } from '@angular/core';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { environment } from '@environment';
 import { BaseComponent } from '@components/base/base.component';
-import { Profile, User } from 'oidc-client';
-import { ProfilePickerDialogService } from '../profile-picker-dialog/profile-picker-dialog.service';
-import { OidcUserService } from '@/app/services/oidc-user.service';
-import { first } from 'rxjs/operators';
+import { Profile } from 'oidc-client';
 
 @Component({
     selector: 'app-topnav',
@@ -23,14 +20,9 @@ export class TopnavComponent extends BaseComponent {
   @Input() showMenuBars!: boolean;
   @Input() showTitle!: boolean;
   @Output() onSidebarToggled: EventEmitter<boolean> = new EventEmitter<boolean>();
-  private profilePickerService!: ProfilePickerDialogService;
 
-  constructor(injector: Injector, private translate: TranslateService, private deviceDetectorService: DeviceDetectorService,
-    private oidcUserService: OidcUserService) {
+  constructor(injector: Injector, private translate: TranslateService, private deviceDetectorService: DeviceDetectorService) {
     super(injector);
-    if (!this.isProduction) {
-      this.profilePickerService = injector.get(ProfilePickerDialogService);
-    }
     this.isMobile = this.deviceDetectorService.isMobile();
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isSidebarToggled) {
@@ -55,18 +47,7 @@ export class TopnavComponent extends BaseComponent {
   }
 
   showProfilesPicker(){
-    this.profilePickerService.open().afterClosed().subscribe((userSelected) => {
-      if (!!userSelected){
-        this.oidcUserService.delete(this.authService.user as User).pipe(first()).subscribe(()=>{
-          this.authService.user = null;
-          this.authService.user = userSelected;
-          this.oidcUserService.add( { ...userSelected } as unknown as User).pipe(first()).subscribe(()=>{
-            window.location.href = window.location.href;
-          });
-        });
-      }
-
-    });
+    this.authService.reloadProfile();
   }
 
 }
