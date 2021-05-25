@@ -8,6 +8,7 @@ import { OidcClientSettings } from 'oidc-client';
 
 export const environment = {
   ...defaultEnvironment,
+  local: true,
   oidcConfig: {
     ...defaultEnvironment.oidcConfig
   } as OidcClientSettings,

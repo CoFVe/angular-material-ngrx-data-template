@@ -3,7 +3,7 @@ import { OidcClientSettings } from "oidc-client";
 
 // environment.defaults.ts
 export const environment = {
-  lab: false,
+  local: false,
   production: false,
   staging: false,
   loggerConfig: { level: NgxLoggerLevel.TRACE, serverLogLevel: NgxLoggerLevel.OFF } as LoggerConfig,
