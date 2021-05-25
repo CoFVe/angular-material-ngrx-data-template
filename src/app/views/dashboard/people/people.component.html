@@ -2,10 +2,13 @@
   <h4>People</h4>
   <span class="nav-spacer"></span>
   <table-updater [tableComponent]="this" updaterFunctionName="changePage"></table-updater>
-  <button mat-raised-button matTooltip="{{ windowWidth() < 769 ? 'person' : ''}}" fxLayoutAlign="center center" color="accent" (click)="openDialog('PeopleDetails')">
-    <mat-icon>add</mat-icon>
-    <span class="hidden-sm">{{'People'}}</span>
-  </button>
+  <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
+    <button mat-raised-button matTooltip="{{ windowWidth() < 769 ? 'person' : ''}}" fxLayoutAlign="center center" color="accent" (click)="openDialog('PeopleDetails')">
+      <mat-icon>add</mat-icon>
+      <span class="hidden-sm">{{'People'}}</span>
+    </button>
+  </ng-template>
+
 </mat-toolbar>
 
 <div>
