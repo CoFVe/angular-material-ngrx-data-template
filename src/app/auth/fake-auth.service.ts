@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Profile, User } from 'oidc-client';
+import { User } from 'oidc-client';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OidcUserService } from '../services/oidc-user.service';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { first } from 'rxjs/operators';
+import { ProfilePickerDialogService } from '../components/profile-picker-dialog/profile-picker-dialog.service';
+import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class AuthService  {
 
   public user!: User | any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private entityService: OidcUserService, private permissionsService: NgxPermissionsService) {
+  constructor(private router: Router, private route: ActivatedRoute, private entityService: OidcUserService, private loadingSpinner: LoadingSpinnerService,
+    private permissionsService: NgxPermissionsService, private profilePickerService: ProfilePickerDialogService) {
     this.entityService.getAll().pipe(first()).subscribe((oidcUsers: User[] | any) => {
       if (!!oidcUsers[0]) {
         this.user = {...oidcUsers[0]};
@@ -25,30 +28,23 @@ export class AuthService  {
   }
 
   login() {
-
+    this.loadingSpinner.addLoading();
     this.entityService.entities$.pipe(first()).subscribe((oidcUsers: User[] | any) => {
+      this.loadingSpinner.removeLoading();
       if (!!oidcUsers[0]) {
         this.user = {...oidcUsers[0]};
+        const routeParams = this.route.snapshot.queryParamMap;
+        this.router.navigate([routeParams.get('redirect') || '/']);
       } else {
-        this.user = {
-          id_token: "user_id_token_string",
-          access_token: "user_access_token_string",
-          expired: false,
-          profile: {
-            email: "user@email.com",
-            sub: "user_id",
-            name: "user_name",
-            given_name: "user_given_name",
-            family_name: "user_family_name",
-            nickname: "user_nickname",
-            roles: 'Administrator'
-          } as unknown as Profile
-        } as User;
-        this.entityService.add( { ...this.user } as unknown as User);
-
+        this.profilePickerService.open().afterClosed().subscribe((user: User | any) => {
+          if (!!user){
+            this.user = user;
+            this.entityService.add( { ...this.user } as unknown as User);
+            const routeParams = this.route.snapshot.queryParamMap;
+            this.router.navigate([routeParams.get('redirect') || '/']);
+          }
+        });
       }
-      const routeParams = this.route.snapshot.paramMap;
-      this.router.navigate([routeParams.get('redirect') || '/']);
     });
   }
 

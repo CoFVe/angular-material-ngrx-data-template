@@ -1,0 +1,8 @@
+
+<mat-toolbar>
+  <h4>{{'Profile Picker' | translate}}</h4>
+</mat-toolbar>
+<div mat-dialog-content>
+  <profile-picker (onClose)="save($event)">
+  </profile-picker>
+</div>

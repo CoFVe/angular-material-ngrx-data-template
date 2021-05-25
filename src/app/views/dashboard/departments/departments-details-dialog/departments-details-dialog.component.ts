@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'departments-details-dialog',
-  templateUrl: './Departments-details-dialog.html',
+  templateUrl: './departments-details-dialog.html',
 })
 export class DepartmentsDetailsDialogComponent {
   @ViewChild(DepartmentsEditorComponent) editorComponent !: DepartmentsEditorComponent;

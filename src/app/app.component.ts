@@ -7,6 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '@app/auth/auth.service';
 import { OidcUserService } from './services/oidc-user.service';
 import { DepartmentService } from './services/department.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   title: string = 'angular-material-ngrx-data-template';
 
   constructor(private translate: TranslateService, private router: Router, private loadinSpinnerService: LoadingSpinnerService, private departmentService: DepartmentService,
-    private authService: AuthService, private cdRef: ChangeDetectorRef, route: ActivatedRoute, oidcUserService: OidcUserService) {
+    private authService: AuthService, private cdRef: ChangeDetectorRef, private route: ActivatedRoute, oidcUserService: OidcUserService, private location: Location) {
     this.loading$ = this.loadinSpinnerService.loading$;
 
     oidcUserService.loaded$.pipe(tap(loaded => {
@@ -30,7 +31,26 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
                   this.authService.listenTokenExpired();
                   this.departmentService.getAll().subscribe();
                 } else {
-                  router.navigate(['login']);
+                  const currentRoute = this.location.path();
+                  const params =new URLSearchParams(window.location.search);
+                  if (params.has('redirect')){
+
+                    router.navigate(['login'], {
+                      queryParams: {
+                        redirect: params.get('redirect')
+                      }
+                    });
+                  }
+                  else if (currentRoute !== '/' && currentRoute !== '/login' ) {
+                    router.navigate(['login'], {
+                      queryParams: {
+                        redirect: this.location.path()
+                      }
+                    });
+                  }
+                  else {
+                    router.navigate(['login']);
+                  }
                 }
 
             });

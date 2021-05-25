@@ -10,7 +10,8 @@
  <span class="nav-spacer"></span>
  <div *ngIf="!!userData && !isMobile" matTooltip="{{ windowWidth() < 769 ? (utf8_encode(userData.name)) : ''}}" matTooltipClass='black-tooltip' fxLayoutAlign="center center">
   <mat-icon color="accent">account_circle</mat-icon>
-  <span class="header-username hidden-sm">{{(utf8_encode(userData.name))}}</span>
+  <span *ngIf="!isProduction" class="header-username hidden-sm" (click)="showProfilesPicker()">{{(utf8_encode(userData.name))}}</span>
+  <span *ngIf="isProduction" class="header-username hidden-sm">{{(utf8_encode(userData.name))}}</span>
 </div>
 <logout *ngIf="!!userData" color="accent" [iconOnly]="true" fxLayoutAlign="center center"></logout>
 </mat-toolbar>

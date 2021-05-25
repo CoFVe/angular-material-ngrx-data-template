@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
+import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AuthService  {
   private manager!: UserManager;
   public user!: User | any;
 
-  constructor(private http: HttpClient, private router: Router, private notificationService: NotificationService) {
+  constructor(private http: HttpClient, private router: Router, private notificationService: NotificationService, private loadingSpinner: LoadingSpinnerService) {
     const userStore = new WebStorageStateStore({ store: localStorage });
     const settings = {
       ...environment.msalConfig,
@@ -31,6 +32,7 @@ export class AuthService  {
   }
 
   login() {
+    this.loadingSpinner.addLoading();
     return this.manager.signinRedirect();
   }
 

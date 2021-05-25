@@ -8,6 +8,8 @@ import {AuthGuard} from './auth.guard';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoginModule } from './login/login.module';
+import { ProfilePickerDialogModule } from '../components/profile-picker-dialog/profile-picker-dialog.module';
+import { ProfilePickerModule } from '../components/profile-picker/profile-picker.module';
 
 @NgModule({
   imports: [
@@ -18,7 +20,9 @@ import { LoginModule } from './login/login.module';
     MatButtonModule,
     LoginModule,
     RouterModule.forChild([{path: '', component: LoginComponent}]),
-    TranslateModule
+    TranslateModule,
+    ProfilePickerModule,
+    ProfilePickerDialogModule
   ],
   declarations: [],
   exports: []

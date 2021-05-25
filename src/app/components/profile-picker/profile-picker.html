@@ -1,0 +1,5 @@
+<mat-selection-list #users [multiple]="false" (selectionChange)="userSelected(users.selectedOptions.selected[0]?.value)">
+  <mat-list-option *ngFor="let user of profiles" [value]="user">
+    {{user.profile.name}} - {{user.profile.roles}}
+  </mat-list-option>
+</mat-selection-list>
