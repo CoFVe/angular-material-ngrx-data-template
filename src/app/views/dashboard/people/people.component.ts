@@ -34,6 +34,9 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   private isDetails!: boolean;
   detailsEntity!: PeopleModel;
   pageSize = environment.pageSize;
+  idFilter = '';
+  nameFilter = '';
+  emailFilter = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -92,7 +95,10 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
       '_page': (this.paginator.pageIndex + 1).toString(),
       '_limit': this.paginator.pageSize.toString(),
       '_sort': this.sort.active,
-      '_order': this.sort.direction
+      '_order': this.sort.direction,
+      'id_like': this.idFilter,
+      'name_like': this.nameFilter,
+      'email_like': this.emailFilter
     } as QueryParams).pipe(tap(()=>{
       this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
         this.pageLength = pagination?.length || 0;

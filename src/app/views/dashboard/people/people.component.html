@@ -46,7 +46,39 @@
         </td>
       </ng-container>
 
+ <!-- Item Description Column -->
+ <ng-container matColumnDef="id-filter">
+  <th mat-header-cell *matHeaderCellDef>
+    <mat-form-field>
+      <input matInput #filterId placeholder="filter id" [(ngModel)]="idFilter" (blur)="changePage()" (keydown.enter)="filterId.blur()">
+    </mat-form-field>
+  </th>
+</ng-container>
+
+<!-- Item Description Column -->
+<ng-container matColumnDef="name-filter">
+  <th mat-header-cell *matHeaderCellDef>
+    <mat-form-field>
+      <input matInput #filterName placeholder="filter name" [(ngModel)]="nameFilter" (blur)="changePage()" (keydown.enter)="filterName.blur()">
+    </mat-form-field>
+  </th>
+</ng-container>
+
+<!-- Cost Description Column -->
+<ng-container matColumnDef="email-filter">
+  <th mat-header-cell *matHeaderCellDef>
+    <mat-form-field>
+      <input matInput #filterEmail placeholder="filter email" [(ngModel)]="emailFilter" (blur)="changePage()" (keydown.enter)="filterEmail.blur()">
+    </mat-form-field>
+  </th>
+</ng-container>
+<!-- Cost Description Column -->
+<ng-container matColumnDef="options-filter">
+  <th mat-header-cell *matHeaderCellDef></th>
+</ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="['id-filter', 'name-filter', 'email-filter', 'options-filter']" class="example-second-header-row"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" matTooltip="{{row.name}}" (click)="changeLocation('PeopleDetails',row)" class="mat-table-item"></tr>
 
     </table>
