@@ -47,13 +47,23 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
     if (this.isDetails)
     this.detailsEntity = this.activatedRoute.snapshot.data.person as PeopleModel;
-    if (this.activatedRoute.snapshot.params.email){
-      //alert("param id");
-    }
+
     if(this.isDetails) {
       this.openDialog('PeopleDetails', this.detailsEntity);
     } else {
       this.loadEntities();
+    }
+  }
+
+  ngOnInit(){
+    const queryParams = JSON.parse(this.activatedRoute.snapshot.params?.queryParams || null);
+    if (!!queryParams){
+      this.dataSource$.pipe(tap(()=>{
+        this.idFilter = queryParams.id_like;
+        this.nameFilter = queryParams.name_like;
+        this.emailFilter = queryParams.email_like;
+        this.changePage(JSON.parse(this.activatedRoute.snapshot.params.queryParams));
+      }), first()).subscribe();
     }
   }
 
@@ -92,8 +102,8 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
     this.changePage();
   }
 
-  changePage(): void {
-    this.dataSource$ = this.entityService.getWithQuery({
+  changePage(queryParams?: QueryParams): void {
+    queryParams = queryParams || {
       '_page': (this.paginator.pageIndex + 1).toString(),
       '_limit': this.paginator.pageSize.toString(),
       '_sort': this.sort.active,
@@ -101,7 +111,9 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
       'id_like': this.idFilter,
       'name_like': this.nameFilter,
       'email_like': this.emailFilter
-    } as QueryParams).pipe(tap(()=>{
+    } as QueryParams;
+    window.history.replaceState({}, '',`/people;queryParams=${JSON.stringify(queryParams)}`);
+    this.dataSource$ = this.entityService.getWithQuery(queryParams).pipe(tap(()=>{
       this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
         this.pageLength = pagination?.length || 0;
       });
