@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
-import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
+import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinner.service';
 import { IAuthService } from './auth.service.interface';
 
 @Injectable({
@@ -42,8 +42,10 @@ export class AuthService implements IAuthService {
       this._authNavStatusSource.next(((!!this.user) && !!!this.user?.expired));
   }
 
-  isAuthenticated(): boolean {
-    return (!!this.user) && !!!this.user?.expired;
+  isAuthenticated(): Promise<boolean> {
+    return this.manager.getUser().then((user : User | any) => {
+      return !!user && !!!user?.expired;
+    });
   }
 
   async logout() {

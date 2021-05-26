@@ -47,6 +47,14 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
     if (this.isDetails)
     this.detailsEntity = this.activatedRoute.snapshot.data.person as PeopleModel;
+    if (this.activatedRoute.snapshot.params.email){
+      //alert("param id");
+    }
+    if(this.isDetails) {
+      this.openDialog('PeopleDetails', this.detailsEntity);
+    } else {
+      this.loadEntities();
+    }
   }
 
   ngAfterViewInit(){
@@ -54,12 +62,6 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
       this.paginator.pageIndex = 0;
       this.paginator.pageSize = this.pageSize;
     } );
-
-    if(this.isDetails) {
-      this.openDialog('PeopleDetails', this.detailsEntity);
-    } else {
-      this.loadEntities();
-    }
   }
 
   openDialog(dialogName: string, currentEntity? : PeopleModel): void {
@@ -109,8 +111,9 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   loadEntities() {
     this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
       this.pageLength = pagination?.length || 0;
+      this.dataSource$ = this.entityService.entities$.pipe(map(entities => entities.slice(0, this.paginator?.pageSize || environment.pageSize)));
     });
-    this.dataSource$ = this.entityService.entities$.pipe(map(entities => entities.slice(0, this.paginator.pageSize)));
+
   }
 
   openDeleteConfirmation(person: PeopleModel): void {

@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OidcUserService } from '../services/oidc-user.service';
 import { NgxPermissionsService } from 'ngx-permissions';
-import { first } from 'rxjs/operators';
+import { filter, first, map, tap } from 'rxjs/operators';
 import { ProfilePickerDialogService } from '../components/profile-picker-dialog/profile-picker-dialog.service';
 import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
 import { IAuthService } from './auth.service.interface';
@@ -53,11 +53,29 @@ export class AuthService implements IAuthService {
     this._authNavStatusSource.next((!!this.user) && !!!this.user?.expired);
   }
 
-  isAuthenticated(): boolean {
-    let result = (!!this.user) && !!!this.user?.expired;
-    if (result)
-      this.loadRoles(this.user);
-    return result;
+  isAuthenticated(): Promise<boolean> {
+
+    return new Promise((resolve) => {
+
+      this.entityService.loaded$
+        .pipe(tap(loaded => {
+          if (loaded) {
+            this.entityService.entities$.pipe(tap((users)=>{
+              if(!!users[0])
+                this.loadRoles(users[0]);
+            }),map((oidcUsers: User[] | any) => {
+              return !!oidcUsers[0] && !!!oidcUsers[0]?.expired;
+            }), first()).subscribe((result) => {
+              resolve(result);
+            })
+          }
+        }),
+        filter(loaded => !!loaded),
+        first()
+      ).subscribe();
+
+    });
+
   }
 
   logout() {
@@ -70,7 +88,7 @@ export class AuthService implements IAuthService {
   }
 
   listenTokenExpired() {
-    this.router.navigate([window.location.pathname]);
+
   }
 
   loadRoles(user: User | any) {

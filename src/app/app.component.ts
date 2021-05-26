@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
   loading = false;
   loadingSubscription!: Subscription;
   title: string = 'angular-material-ngrx-data-template';
+  private currentRoute: string = this.location.path();
 
   constructor(private translate: TranslateService, private router: Router, private loadinSpinnerService: LoadingSpinnerService, private departmentService: DepartmentService,
     private authService: AuthService, private cdRef: ChangeDetectorRef, private route: ActivatedRoute, oidcUserService: OidcUserService, private location: Location) {
@@ -26,12 +27,20 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
 
     oidcUserService.loaded$.pipe(tap(loaded => {
           if (!loaded) {
-            oidcUserService.getAll().subscribe(()=>{
-                if (this.authService.isAuthenticated()) {
+            oidcUserService.getAll().subscribe(async ()=>{
+                if (await this.authService.isAuthenticated()) {
                   this.authService.listenTokenExpired();
                   this.departmentService.getAll().subscribe();
+                  if (window.location.pathname === '/login' ) {
+                    const params =new URLSearchParams(window.location.search);
+                    if (params.has('redirect')){
+                      router.navigate([params.get('redirect')]);
+                    } else {
+                      router.navigate(['/']);
+                    }
+
+                  }
                 } else {
-                  const currentRoute = this.location.path();
                   const params =new URLSearchParams(window.location.search);
                   if (params.has('redirect')){
 
@@ -41,7 +50,7 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
                       }
                     });
                   }
-                  else if (currentRoute !== '/' && currentRoute !== '/login' ) {
+                  else if (this.currentRoute !== '/' && this.currentRoute !== '/login' ) {
                     router.navigate(['login'], {
                       queryParams: {
                         redirect: this.location.path()
@@ -96,6 +105,12 @@ export class AppComponent implements OnInit, AfterViewChecked, OnDestroy {
         case event instanceof NavigationCancel:
         case event instanceof NavigationError: {
           this.loadinSpinnerService.removeLoading();
+          // if (this.currentRoute !== this.location.path()){
+          //   const params =new URLSearchParams(this.currentRoute);
+          //    this.router.navigate([this.currentRoute.slice(1, this.currentRoute.length-1).split('/')[0]], {
+          //      queryParams: params.getAll()
+          //    });
+          // }
           break;
         }
         default: {

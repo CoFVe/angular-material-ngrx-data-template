@@ -9,7 +9,7 @@ import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-
   styleUrls: ['./auth-callback.component.scss']
 })
 export class AuthCallbackComponent implements OnInit, OnDestroy {
-  public redirectTo: string = encodeURIComponent('people');
+
   error!: boolean;
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute, private loadingSpinner: LoadingSpinnerService) {
@@ -25,7 +25,7 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
 
     this.loadingSpinner.addLoading();
     await this.authService.completeAuthentication();
-    this.router.navigate([this.redirectTo]);
+
 
   }
 
