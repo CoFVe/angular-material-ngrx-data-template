@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { EntityCollectionDataService, QueryParams } from '@ngrx/data';
-import { Observable, of } from 'rxjs';
-import { tap, map, first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { Update } from '@ngrx/entity';
 import { LoggerService } from '@services/logger.service';
 
@@ -22,17 +22,15 @@ export class LocalStorageAdapter<T> implements EntityCollectionDataService<T> {
 
   add(entity: T | any): Observable<T> {
     this.logger.info('Storage add');
-    const currentEntity = { ...entity }
+    const currentEntity = { ...entity } as T | any;
     currentEntity[this.entityIdentifier] = entity[this.entityIdentifier] || (this.entities ? this.entities.length + 1 : 1);
     this.entities = [...this.entities || [], currentEntity];
-    this.updateStorage();
-    return of(currentEntity);
+    return this.updateStorage().pipe(map(()=>currentEntity));
   }
 
   delete(id: string | number): Observable<string | number> {
-    this.entities = this.entities.filter((e: any) => e[this.entityIdentifier] !== id);
-    this.updateStorage();
-    return of(id);
+    this.entities = this.entities.filter((e: T | any) => e[this.entityIdentifier] !== id);
+    return this.updateStorage().pipe(map(()=>id));
   }
 
   getAll(): Observable<T[]> {
@@ -65,8 +63,8 @@ export class LocalStorageAdapter<T> implements EntityCollectionDataService<T> {
   }
 
   update(update: import('@ngrx/entity').Update<T>): Observable<T | any> {
-    let updatedEntity = null;
-    this.entities = [...this.entities.map((e: any) => {
+    let updatedEntity: T | any = null;
+    this.entities = [...this.entities.map((e: T | any) => {
       if (e[this.entityIdentifier] === update.id) {
         updatedEntity = {
           ...e,
@@ -76,41 +74,23 @@ export class LocalStorageAdapter<T> implements EntityCollectionDataService<T> {
       }
       return e;
     })];
-    this.updateStorage();
-    return of(updatedEntity);
+    return this.updateStorage().pipe(map(()=>updatedEntity));
   }
 
-  upsert(entity: T| any): Observable<T> {
+  upsert(entity: T| any): Observable<T | any> {
     return this.getById(entity[this.entityIdentifier]).pipe(map(currentEntity => {
       if (currentEntity) {
-        this.update({
+        return this.update({
           id: entity[this.entityIdentifier],
           changes: entity
         } as Update<T>);
-        return entity;
       } else {
-        this.add(entity);
-        return entity;
-      }
-    }));
-  }
-
-  patch(entity: T | any): Observable<T> {
-    return this.getById(entity[this.entityIdentifier]).pipe(map(currentEntity => {
-      if (currentEntity) {
-        this.update({
-          id: entity[this.entityIdentifier],
-          changes: entity
-        } as Update<T>);
-        return entity;
-      } else {
-        this.add(entity);
-        return entity;
+        return this.add(entity);
       }
     }));
   }
 
   private updateStorage() {
-    return this.storage.set(this.name, this.entities).pipe(first()).subscribe();
+    return this.storage.set(this.name, this.entities);
   }
 }

@@ -89,9 +89,7 @@ export class AuthService implements IAuthService {
           this.user = null;
           this.user = { ...userSelected };
           this.entityService.add( { ...userSelected } as unknown as User).pipe(first()).subscribe(()=>{
-            setInterval(()=>{
-              window.location.href = window.location.href;
-            }, 100);
+            window.location.href = window.location.href;
           });
         });
       }
