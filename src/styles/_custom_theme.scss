@@ -104,7 +104,7 @@
 }
 
 .dialog-buttons {
-  margin-top: 25px !important;
+  margin-top: 15px;
 
   button {
     margin-right: 10px;
@@ -121,4 +121,10 @@
 
 .mat-snack-bar-container {
   padding: 0 !important;
+}
+
+.mat-toolbar {
+  button {
+    margin-left: 10px;
+  }
 }

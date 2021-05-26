@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="dialog-buttons">
+  <div fxLayoutAlign="center center">
     <ng-template [ngxPermissionsOnly]="['Administrator', 'administrator']">
       <mat-slide-toggle
         *ngIf="!!originalEntity?.id"

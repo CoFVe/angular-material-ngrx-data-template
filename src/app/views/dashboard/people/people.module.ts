@@ -35,7 +35,7 @@ import { TableUpdaterModule } from '@/app/components/table-updater/table-updater
     MatToolbarModule,
     MatTableModule,
     MatTooltipModule,
-    FlexLayoutModule.withConfig({ addFlexToParent: true }),
+    FlexLayoutModule,
     PeopleStoreModule,
     RouterModule,
     MatDialogModule,
