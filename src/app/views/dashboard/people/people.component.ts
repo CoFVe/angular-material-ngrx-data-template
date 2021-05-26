@@ -103,7 +103,7 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   }
 
   changePage(queryParams?: QueryParams): void {
-    queryParams = queryParams || {
+    let params = queryParams || {
       '_page': (this.paginator.pageIndex + 1).toString(),
       '_limit': this.paginator.pageSize.toString(),
       '_sort': this.sort.active,
@@ -112,8 +112,15 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
       'name_like': this.nameFilter,
       'email_like': this.emailFilter
     } as QueryParams;
-    window.history.replaceState({}, '',`/people;queryParams=${JSON.stringify(queryParams)}`);
-    this.dataSource$ = this.entityService.getWithQuery(queryParams).pipe(tap(()=>{
+    const currentParams = {...params};
+      (currentParams['_page'] as any) = undefined;
+    if (!!!queryParams) {
+      window.history.pushState({}, '',`/people;queryParams=${JSON.stringify(currentParams)}`);
+    } else {
+      params = JSON.parse(JSON.stringify({...currentParams}));
+      window.history.replaceState({}, '',`/people;queryParams=${JSON.stringify(params)}`);
+    }
+    this.dataSource$ = this.entityService.getWithQuery(params).pipe(tap(()=>{
       this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
         this.pageLength = pagination?.length || 0;
       });
