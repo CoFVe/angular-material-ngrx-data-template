@@ -17,6 +17,7 @@ export const environment = {
     loadUserInfo: false,
     automaticSilentRenew: true
   } as OidcClientSettings,
-  serviceUrl: '/api',
-  apiVersion: '1.0-beta'
+  serviceUrl: 'http://localhost:3000',
+  apiVersion: '1.0-beta',
+  pageSize: 5
 } as any;

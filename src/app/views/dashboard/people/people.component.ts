@@ -15,6 +15,7 @@ import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinn
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '@/app/components/notification-message/notification.service';
 import { ConfirmationDialogService } from '@/app/components/confirmation-dialog/confirmation-dialog.service';
+import { environment } from '@environment';
 
 @Component({
   selector: 'people-list',
@@ -32,6 +33,7 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   isRateLimitReached = false;
   private isDetails!: boolean;
   detailsEntity!: PeopleModel;
+  pageSize = environment.pageSize;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,7 +47,10 @@ export class PeopleComponent extends PageBaseComponent implements AfterViewInit 
   }
 
   ngAfterViewInit(){
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+      this.paginator.pageSize = this.pageSize;
+    } );
 
     if(this.isDetails) {
       this.openDialog('PeopleDetails', this.detailsEntity);

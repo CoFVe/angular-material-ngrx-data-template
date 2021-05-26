@@ -6,6 +6,7 @@ import { filter, tap, first } from 'rxjs/operators';
 import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-spinner.service';
 import {  QueryParams } from '@ngrx/data';
 import { DepartmentService } from '@/app/services/department.service';
+import { environment } from '@environment';
 
 @Injectable()
 export class PeopleResolver implements Resolve<boolean> {
@@ -28,7 +29,7 @@ export class PeopleResolver implements Resolve<boolean> {
                 if (!loaded) {
                   this.entityService.getWithQuery({
                     '_page': '1',
-                    '_limit': '5',
+                    '_limit': environment.pageSize,
                     '_sort': 'id',
                     '_order': 'desc'
                   } as QueryParams).subscribe(()=>{

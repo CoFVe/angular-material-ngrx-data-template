@@ -50,6 +50,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" matTooltip="{{row.name}}" (click)="changeLocation('PeopleDetails',row)" class="mat-table-item"></tr>
 
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="pageLength" showFirstLastButtons (page)="changePage()"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[pageSize, pageSize * 2, pageSize * 3, pageSize * 4]" [length]="pageLength" showFirstLastButtons (page)="changePage()"></mat-paginator>
 
 </div>
