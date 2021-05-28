@@ -46,9 +46,7 @@ import { DepartmentStoreModule } from '@/app/stores/department-store.module';
     DepartmentsEditorModule
   ],
   declarations: [ DepartmentsComponent, DepartmentsDetailsDialogComponent ],
-  providers: [
-    DepartmentsResolver
-  ],
+  providers: [ DepartmentsResolver ],
   entryComponents:[DepartmentsDetailsDialogComponent]
 })
 export class DepartmentsModule {

@@ -32,7 +32,7 @@ export class PeopleResolver implements Resolve<boolean> {
                     '_limit': environment.pageSize,
                     '_sort': 'id',
                     '_order': 'desc'
-                  } as QueryParams).subscribe(()=>{
+                  } as QueryParams).pipe(first()).subscribe(()=>{
 
                     this.departmentService.loaded$.pipe(tap(loaded => {
                       if (!loaded) {

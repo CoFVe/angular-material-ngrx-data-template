@@ -25,6 +25,7 @@ import { LoadingSpinnerModule } from '@/app/components/loading-spinner/loading-s
 import { PeopleDetailsResolver } from './people-details-dialog/people-details.resolver';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { TableUpdaterModule } from '@/app/components/table-updater/table-updater.module';
+import { FilterService } from '@/app/services/filter.service';
 
 @NgModule({
   imports: [
@@ -53,9 +54,7 @@ import { TableUpdaterModule } from '@/app/components/table-updater/table-updater
     TableUpdaterModule
   ],
   declarations: [ PeopleComponent, PeopleDetailsDialogComponent ],
-  providers: [
-    PeopleResolver, PeopleDetailsResolver
-  ],
+  providers: [ PeopleResolver, PeopleDetailsResolver, FilterService ],
   entryComponents:[ PeopleDetailsDialogComponent ]
 })
 export class PeopleModule {
