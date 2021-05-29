@@ -1,4 +1,3 @@
-import { Location } from "@angular/common";
 import { Injectable } from "@angular/core";
 import { FilterField } from "@/app/models/filter-field.model";
 import { QueryParams } from "@ngrx/data";
@@ -10,7 +9,6 @@ export class FilterService {
     return this._displayedFields;
   }
   pageLength!: number;
-  pageSize!: number;
   private _fields: Map<string, FilterField> = new Map<string,FilterField>();
   filterValues: any = {};
   private _initialRoute!: string;
@@ -18,9 +16,8 @@ export class FilterService {
   constructor(){
   }
 
-  initialize(initialRoute: string, initialPageSize: number, fields?: FilterField | FilterField[]) {
+  initialize(initialRoute: string, fields?: FilterField | FilterField[]) {
     this._initialRoute = initialRoute;
-    this.pageSize = initialPageSize;
     if(Array.isArray(fields)){
       this.setFields(fields as FilterField[]);
     } else {

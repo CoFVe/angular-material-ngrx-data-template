@@ -29,7 +29,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
   dataSource$!: Observable<PeopleModel[]>;
   private isDetails!: boolean;
   detailsEntity!: PeopleModel;
-
+  env = environment;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -39,7 +39,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
     private loadingSpinner: LoadingSpinnerService, public filterService: FilterService) {
     super(injector);
 
-    this.filterService.initialize('/people', environment.pageSize, [
+    this.filterService.initialize('/people', [
       {
         name: 'id',
         isDisplayed: true,
@@ -105,7 +105,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
 
   onSortChange(): void {
     this.paginator.pageIndex = 0;
-    this.paginator.pageSize = this.filterService.pageSize;
+    this.paginator.pageSize = environment.pageSize;
     this.changePage();
   }
 
