@@ -83,6 +83,6 @@
       <tr mat-row *matRowDef="let row; columns: filterService.displayedFields;" matTooltip="{{row.name}}" (click)="openDetails('PeopleDetails',row)" class="mat-table-item"></tr>
 
     </table>
-    <mat-paginator [pageSizeOptions]="[env.pageSize, env.pageSize * 2, env.pageSize * 3, env.pageSize * 4]" [length]="filterService.pageLength" showFirstLastButtons (page)="changePage()"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[env.pageSize, env.pageSize * 2, env.pageSize * 3, env.pageSize * 4]" [length]="pageLength" showFirstLastButtons (page)="changePage()"></mat-paginator>
 
 </div>

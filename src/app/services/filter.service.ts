@@ -8,7 +8,6 @@ export class FilterService {
   get displayedFields(): string[] {
     return this._displayedFields;
   }
-  pageLength!: number;
   private _fields: Map<string, FilterField> = new Map<string,FilterField>();
   filterValues: any = {};
   private _initialRoute!: string;

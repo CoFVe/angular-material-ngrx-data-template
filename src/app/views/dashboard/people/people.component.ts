@@ -30,6 +30,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
   private isDetails!: boolean;
   detailsEntity!: PeopleModel;
   env = environment;
+  pageLength!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -119,14 +120,14 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
 
     this.dataSource$ = this.entityService.getWithQuery(params).pipe(tap(()=>{
       this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
-        this.filterService.pageLength = pagination?.length || 0;
+        this.pageLength = pagination?.length || 0;
       });
     }));
   }
 
   loadEntities() {
     this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
-      this.filterService.pageLength = pagination?.length || 0;
+      this.pageLength = pagination?.length || 0;
       this.dataSource$ = this.entityService.entities$.pipe(map(entities => entities.slice(0, this.paginator?.pageSize || environment.pageSize)));
     });
 
