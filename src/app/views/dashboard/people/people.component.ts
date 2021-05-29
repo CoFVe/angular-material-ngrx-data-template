@@ -31,6 +31,8 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
   detailsEntity!: PeopleModel;
   env = environment;
   pageLength!: number;
+  initialRoute!: string;
+  detailsRoute!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -40,7 +42,10 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
     private loadingSpinner: LoadingSpinnerService, public filterService: FilterService) {
     super(injector);
 
-    this.filterService.initialize('/people', [
+    this.initialRoute = '/' + this.entityService.entityName.toLocaleLowerCase();
+    this.detailsRoute = this.initialRoute + '/details';
+
+    this.filterService.initialize(this.initialRoute, [
       {
         name: 'id',
         isDisplayed: true,
@@ -64,15 +69,17 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
 
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
 
+  }
+
+  ngOnInit(){
+
     if(this.isDetails) {
       this.detailsEntity = this.activatedRoute.snapshot.data.person as PeopleModel;
       this.openDialog('PeopleDetails', this.detailsEntity);
     } else {
       this.loadEntities();
     }
-  }
 
-  ngOnInit(){
     const queryParams = JSON.parse(this.activatedRoute.snapshot.params?.queryParams || null);
     if (!!queryParams){
       this.dataSource$.pipe(tap(()=>{
@@ -93,14 +100,14 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
             this.isDetails = false;
             this.changePage();
           }
-          window.history.replaceState({}, '',`/people`);
+          window.history.replaceState({}, '',`${this.initialRoute}`);
         });
         break;
     }
   }
 
   openDetails(dialogName: string, currentEntity : PeopleModel): void {
-    window.history.pushState({}, '',`/people/details/${currentEntity.id}`);
+    window.history.pushState({}, '',`${this.detailsRoute}/${currentEntity.id}`);
     this.openDialog(dialogName, currentEntity);
   }
 
