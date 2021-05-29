@@ -11,22 +11,31 @@ export class FilterService {
   }
   pageLength!: number;
   pageSize!: number;
-  private fields: Map<string, FilterField> = new Map<string,FilterField>();
+  private _fields: Map<string, FilterField> = new Map<string,FilterField>();
   filterValues: any = {};
-  private originalRoute!: string;
+  private _initialRoute!: string;
 
-  constructor(private location: Location){
-    this.originalRoute = this.location.path();
+  constructor(){
+  }
+
+  initialize(initialRoute: string, initialPageSize: number, fields?: FilterField | FilterField[]) {
+    this._initialRoute = initialRoute;
+    this.pageSize = initialPageSize;
+    if(Array.isArray(fields)){
+      this.setFields(fields as FilterField[]);
+    } else {
+      this.setField(fields as FilterField);
+    }
   }
 
   setField(field: FilterField) {
-    if(field.isDisplayed && !this.fields.has(field.name)) {
+    if(field.isDisplayed && !this._fields.has(field.name)) {
       this._displayedFields = [
         ...this._displayedFields,
         field.name
       ]
     }
-    this.fields.set(field.name, field);
+    this._fields.set(field.name, field);
     if (!!field.filterValue){
       this.filterValues[field.name] = field.filterValue;
     }
@@ -34,13 +43,13 @@ export class FilterService {
 
   setFields(fields: FilterField[]) {
     fields.forEach(field=> {
-      if(field.isDisplayed && !this.fields.has(field.name)) {
+      if(field.isDisplayed && !this._fields.has(field.name)) {
         this._displayedFields = [
           ...this._displayedFields,
           field.name
         ]
       }
-      this.fields.set(field.name, field);
+      this._fields.set(field.name, field);
       if (!!field.filterValue) {
         this.filterValues[field.name] = field.filterValue;
       }
@@ -68,7 +77,7 @@ export class FilterService {
 
   private _transformQueryParams(resultQueryParams: QueryParams){
     this._displayedFields.forEach(fieldName=> {
-      if(this.fields.has(fieldName)) {
+      if(this._fields.has(fieldName)) {
         if (!!this.filterValues[fieldName]) {
           resultQueryParams[fieldName + '_like'] = this.filterValues[fieldName] || '';
         }
@@ -77,16 +86,24 @@ export class FilterService {
     const currentParams = {...resultQueryParams};
       (currentParams['_page'] as any) = undefined;
     if (!!!resultQueryParams) {
-      window.history.pushState({}, '',`${this.originalRoute};queryParams=${JSON.stringify(currentParams)}`);
+      window.history.pushState({}, '',`${this._initialRoute};queryParams=${JSON.stringify(currentParams)}`);
     } else {
       resultQueryParams = JSON.parse(JSON.stringify({...currentParams}));
-      window.history.replaceState({}, '',`${this.originalRoute};queryParams=${JSON.stringify(resultQueryParams)}`);
+      window.history.replaceState({}, '',`${this._initialRoute};queryParams=${JSON.stringify(resultQueryParams)}`);
     }
     return resultQueryParams;
   }
 
-  setOriginalRoute(route: string){
-    this.originalRoute = route;
+  setFilterValuesFromQueryParams(queryParams: QueryParams) {
+    Object.keys(queryParams).forEach((key) => {
+      if(key.includes('_like')) {
+        this.filterValues[key.replace(new RegExp('_like' + '$'), '')] = queryParams[key];
+      }
+    })
+  }
+
+  setInitialRoute(route: string){
+    this._initialRoute = route;
   }
 
 }

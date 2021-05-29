@@ -26,7 +26,6 @@ import { FilterField } from '@/app/models/filter-field.model';
 })
 
 export class PeopleComponent extends PageBaseComponent implements OnDestroy {
-  env = environment;
   dataSource$!: Observable<PeopleModel[]>;
   private isDetails!: boolean;
   detailsEntity!: PeopleModel;
@@ -40,7 +39,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
     private loadingSpinner: LoadingSpinnerService, public filterService: FilterService) {
     super(injector);
 
-    this.filterService.setFields([
+    this.filterService.initialize('/people', environment.pageSize, [
       {
         name: 'id',
         isDisplayed: true,
@@ -61,9 +60,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
         isDisplayed: true
       },
     ] as FilterField[]);
-    this.filterService.setOriginalRoute('/people');
 
-    this.filterService.pageSize = this.env.pageSize;
     this.isDetails = !!this.activatedRoute.snapshot.params.id;
 
     if(this.isDetails) {
@@ -78,9 +75,7 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
     const queryParams = JSON.parse(this.activatedRoute.snapshot.params?.queryParams || null);
     if (!!queryParams){
       this.dataSource$.pipe(tap(()=>{
-        this.filterService.filterValues['id'] = queryParams.id_like;
-        this.filterService.filterValues['name'] = queryParams.name_like;
-        this.filterService.filterValues['email'] = queryParams.email_like;
+        this.filterService.setFilterValuesFromQueryParams(queryParams);
         this.changePage(JSON.parse(this.activatedRoute.snapshot.params.queryParams));
       }), first()).subscribe();
     }
@@ -96,14 +91,14 @@ export class PeopleComponent extends PageBaseComponent implements OnDestroy {
           if (this.isDetails) {
             this.isDetails = false;
             this.changePage();
-            window.history.replaceState({}, '',`/people`);
           }
+          window.history.replaceState({}, '',`/people`);
         });
         break;
     }
   }
 
-  changeLocation(dialogName: string, currentEntity : PeopleModel): void {
+  openDetails(dialogName: string, currentEntity : PeopleModel): void {
     window.history.pushState({}, '',`/people/details/${currentEntity.id}`);
     this.openDialog(dialogName, currentEntity);
   }
