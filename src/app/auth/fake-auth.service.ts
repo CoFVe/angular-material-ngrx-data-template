@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { User } from 'oidc-client';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OidcUserService } from '../services/oidc-user.service';
+import { OidcUserService } from '@services/oidc-user.service';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { filter, first, map, tap } from 'rxjs/operators';
-import { ProfilePickerDialogService } from '../components/profile-picker-dialog/profile-picker-dialog.service';
-import { LoadingSpinnerService } from '../components/loading-spinner/loading-spinner.service';
+import { ProfilePickerDialogService } from '@components/profile-picker-dialog/profile-picker-dialog.service';
+import { LoadingSpinnerService } from '@components/loading-spinner/loading-spinner.service';
 import { IAuthService } from './auth.service.interface';
 
 @Injectable({
@@ -32,17 +32,16 @@ export class AuthService implements IAuthService {
     this.loadingSpinner.addLoading();
     this.entityService.entities$.pipe(first()).subscribe((oidcUsers: User[] | any) => {
       this.loadingSpinner.removeLoading();
+      const redirectUrl = this.route.snapshot.queryParamMap.get('redirect') || '/';
       if (!!oidcUsers[0]) {
         this.user = {...oidcUsers[0]};
-        const routeParams = this.route.snapshot.queryParamMap;
-        this.router.navigate([routeParams.get('redirect') || '/']);
+        window.location.href = redirectUrl;
       } else {
         this.profilePickerService.open().afterClosed().subscribe((user: User | any) => {
           if (!!user){
             this.user = user;
             this.entityService.add( { ...this.user } as unknown as User);
-            const routeParams = this.route.snapshot.queryParamMap;
-            this.router.navigate([routeParams.get('redirect') || '/']);
+            window.location.href = redirectUrl;
           }
         });
       }
