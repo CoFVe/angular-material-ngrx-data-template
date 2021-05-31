@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@app/auth/auth.guard';
+import { DashboardModule } from './views/dashboard/dashboard.module';
+import { LoginPageModule } from './views/login/login-page.module';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: ()=> import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
+    loadChildren: ()=> DashboardModule,
     canActivate: [AuthGuard]
   },
   {
@@ -14,11 +16,11 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./views/login/login-page.module').then(m => m.LoginPageModule),
+    loadChildren: () => LoginPageModule,
   },
   {
     path: 'signin-oidc',
-    loadChildren: () => import('./views/login/login-page.module').then(m => m.LoginPageModule),
+    loadChildren: () => LoginPageModule,
   },
   {
     path: 'error',

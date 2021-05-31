@@ -8,8 +8,8 @@ import {AuthGuard} from './auth.guard';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoginModule } from './login/login.module';
-import { ProfilePickerDialogModule } from '../components/profile-picker-dialog/profile-picker-dialog.module';
-import { ProfilePickerModule } from '../components/profile-picker/profile-picker.module';
+import { ProfilePickerDialogModule } from '@components/profile-picker-dialog/profile-picker-dialog.module';
+import { ProfilePickerModule } from '@components/profile-picker/profile-picker.module';
 
 @NgModule({
   imports: [
