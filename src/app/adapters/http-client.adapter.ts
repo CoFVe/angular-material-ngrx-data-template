@@ -23,8 +23,10 @@ export class HttpClientAdapter<T> implements EntityCollectionDataService<T> {
     return this.addInStorage(entity);
   }
 
-  delete(id: string | number): Observable<string | number> {
-    return this.deleteFromStorage(id) as unknown as Observable<string | number>;
+  delete(id: string | number | T): Observable<string | number> {
+    if (typeof id == 'number' || typeof id == 'string')
+      return this.deleteFromStorage(id as string | number) as unknown as Observable<string | number>;
+    return this.deleteFromStorage((id as any)[this.entityIdentifier]) as unknown as Observable<string | number>;
   }
 
   getAll(): Observable<T[]> {
@@ -72,11 +74,8 @@ export class HttpClientAdapter<T> implements EntityCollectionDataService<T> {
       .pipe(tap((response) => {
         this.logger.debug('httpClient delete ' + this.name + ' and response: ' + JSON.stringify(response))
       }),
-      map((entity: any) => {
-      if (entity && entity[this.entityIdentifier]) {
-        return entity[this.entityIdentifier];
-        }
-        return !entity ? null : entity.toString();
+      map(() => {
+        return id;
       })
     );
   }

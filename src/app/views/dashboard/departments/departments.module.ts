@@ -20,7 +20,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import { DepartmentsDetailsDialogComponent } from './departments-details-dialog/departments-details-dialog.component';
 import { DepartmentsEditorModule } from '@/app/components/departments-editor/departments-editor.module';
-import { DepartmentStoreModule } from '@/app/stores/department-store.module';
+import { DepartmentStoreModule } from '@/app/store/department-store.module';
 
 @NgModule({
   imports: [

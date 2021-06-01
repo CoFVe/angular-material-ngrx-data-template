@@ -6,7 +6,7 @@ import { PeopleComponent } from './people.component';
 import { PeopleResolver } from './people.resolver';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PeopleStoreModule } from '@/app/stores/people-store.module';
+import { PeopleStoreModule } from '@/app/store/people-store.module';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';

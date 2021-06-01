@@ -42,8 +42,8 @@
       "@components/*": [
         "src/app/components/*"
       ],
-      "@stores/*": [
-        "src/app/stores/*"
+      "@store/*": [
+        "src/app/store/*"
       ],
       "@environment": [ "src/environments/environment"]
     }

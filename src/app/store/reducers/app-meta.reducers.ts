@@ -1,7 +1,7 @@
 import { ActionReducer, MetaReducer } from '@ngrx/store';
 import { environment } from '@environment';
 import { storeLogger } from 'ngrx-store-logger';
-import { AppState } from '@app/states/app.state';
+import { AppState } from '@/app/store/states/app.state';
 
 export function logger(reducer: ActionReducer<any>): any {
   // default, no options
