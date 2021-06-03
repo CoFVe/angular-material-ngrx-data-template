@@ -47,12 +47,12 @@
             "local": {
               "fileReplacements": [
                 {
-                  "replace": "src/app/auth/auth.service.ts",
-                  "with": "src/app/auth/fake-auth.service.ts"
+                  "replace": "src/app/auth/common/services/auth.service.ts",
+                  "with": "src/app/auth/common/services/fake-auth.service.ts"
                 },
                 {
-                  "replace": "src/app/auth/auth.module.ts",
-                  "with": "src/app/auth/fake-auth.module.ts"
+                  "replace": "src/app/auth/common/modules/auth.module.ts",
+                  "with": "src/app/auth/common/modules/fake-auth.module.ts"
                 },
                 {
                   "replace": "src/environments/environment.ts",

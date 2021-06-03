@@ -31,13 +31,13 @@
         "src/app/views/*"
       ],
       "@models/*": [
-        "src/app/models/*"
+        "src/app/departments/models/*"
       ],
       "@services/*": [
-        "src/app/services/*"
+        "src/app/departments/services/*"
       ],
       "@adapters/*": [
-        "src/app/adapters/*"
+        "src/app/common/adapters/*"
       ],
       "@components/*": [
         "src/app/components/*"

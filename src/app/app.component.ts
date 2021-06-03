@@ -2,12 +2,12 @@ import { Component, OnInit, ChangeDetectorRef, AfterViewChecked, OnDestroy } fro
 import { TranslateService } from '@ngx-translate/core';
 import { Router, RouterEvent, Event, RouteConfigLoadStart, RouteConfigLoadEnd, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, ActivatedRoute } from '@angular/router';
 import { filter, first, tap } from 'rxjs/operators';
-import { LoadingSpinnerService } from '@/app/components/loading-spinner/loading-spinner.service';
 import { Observable, Subscription } from 'rxjs';
-import { AuthService } from '@app/auth/auth.service';
-import { OidcUserService } from './services/oidc-user.service';
-import { DepartmentService } from './services/department.service';
+import { OidcUserService } from './auth/user/services/oidc-user.service';
+import { DepartmentService } from './departments/services/department.service';
 import {Location} from '@angular/common';
+import { AuthService } from './auth/common/services/auth.service';
+import { LoadingSpinnerService } from './common/components/loading-spinner/loading-spinner.service';
 
 @Component({
   selector: 'app-root',

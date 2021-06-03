@@ -1,0 +1,170 @@
+import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { PageBaseComponent } from '@/app/common/views/base/page-base.component';
+import { PeopleModel } from '@/app/people/models/people.model';
+import { PeopleService } from '@/app/people/services/people.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { QueryParams } from '@ngrx/data';
+import { PaginationService } from '@/app/common/services/pagination.service';
+import { PeopleDetailsDialogComponent } from '../../../people/views/people-details-dialog/people-details-dialog.component';
+import { Observable } from 'rxjs';
+import { first, map, tap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmationDialogService } from '@/app/common/components/confirmation-dialog/confirmation-dialog.service';
+import { environment } from '@environment';
+import { FilterService } from '@/app/common/services/filter.service';
+import { FilterField } from '@/app/common/models/filter-field.model';
+import { NotificationService } from '@/app/common/components/notification-message/notification.service';
+import { LoadingSpinnerService } from '@/app/common/components/loading-spinner/loading-spinner.service';
+import { PaginationModel } from '@/app/common/models/pagination.model';
+
+@Component({
+  selector: 'people-list',
+  templateUrl: './people.component.html',
+  styleUrls: ['./people.component.scss']
+})
+
+export class PeopleComponent extends PageBaseComponent implements OnDestroy {
+  dataSource$!: Observable<PeopleModel[]>;
+  private isDetails!: boolean;
+  detailsEntity!: PeopleModel;
+  env = environment;
+  pageLength!: number;
+  initialRoute!: string;
+  detailsRoute!: string;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(injector: Injector, public entityService: PeopleService, private paginationService: PaginationService,
+    private confirmDialogService: ConfirmationDialogService, public dialog: MatDialog, private notificationService: NotificationService,
+    private loadingSpinner: LoadingSpinnerService, public filterService: FilterService) {
+    super(injector);
+
+    this.initialRoute = '/' + this.entityService.entityName.toLocaleLowerCase();
+    this.detailsRoute = this.initialRoute + '/details';
+
+    this.filterService.initialize(this.initialRoute, [
+      {
+        name: 'id',
+        isDisplayed: true,
+        filterType: 'input'
+      },
+      {
+        name: 'name',
+        isDisplayed: true,
+        filterType: 'input'
+      },
+      {
+        name: 'email',
+        isDisplayed: true,
+        filterType: 'input'
+      },
+      {
+        name: 'table-options',
+        isDisplayed: true
+      },
+    ] as FilterField[]);
+
+    this.isDetails = !!this.activatedRoute.snapshot.params.id;
+
+  }
+
+  ngOnInit(){
+
+    if(this.isDetails) {
+      this.detailsEntity = this.activatedRoute.snapshot.data.person as PeopleModel;
+      this.openDialog('PeopleDetails', this.detailsEntity);
+    } else {
+      this.loadEntities();
+    }
+
+    const queryParams = JSON.parse(this.activatedRoute.snapshot.params?.queryParams || null);
+    if (!!queryParams){
+      this.dataSource$.pipe(tap(()=>{
+        this.filterService.setFilterValuesFromQueryParams(queryParams);
+        this.changePage(JSON.parse(this.activatedRoute.snapshot.params.queryParams));
+      }), first()).subscribe();
+    }
+  }
+
+  openDialog(dialogName: string, currentEntity? : PeopleModel): void {
+    switch (dialogName) {
+      case 'PeopleDetails':
+        const dialogRef = this.dialog.open(PeopleDetailsDialogComponent, {
+          data: currentEntity
+        });
+        dialogRef.afterClosed().pipe(first()).subscribe(()=>{
+          if (this.isDetails) {
+            this.isDetails = false;
+            this.changePage();
+          }
+          window.history.replaceState({}, '',`${this.initialRoute}`);
+        });
+        break;
+    }
+  }
+
+  openDetails(dialogName: string, currentEntity : PeopleModel): void {
+    window.history.pushState({}, '',`${this.detailsRoute}/${currentEntity.id}`);
+    this.openDialog(dialogName, currentEntity);
+  }
+
+  onSortChange(): void {
+    this.paginator.pageIndex = 0;
+    this.paginator.pageSize = environment.pageSize;
+    this.changePage();
+  }
+
+  changePage(queryParams?: QueryParams): void {
+    let params;
+    if (!!queryParams) {
+      params = this.filterService.replaceQueryParamsInRoute(queryParams);
+    } else {
+      params = this.filterService.addQueryParamsInRoute(this.paginator.pageIndex + 1, this.paginator.pageSize, this.sort.active, this.sort.direction);
+    }
+
+    this.dataSource$ = this.entityService.getWithQuery(params).pipe(tap(()=>{
+      this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
+        this.pageLength = pagination?.length || 0;
+      });
+    }));
+  }
+
+  loadEntities() {
+    this.paginationService.getById(this.entityService.entityName).pipe(first()).subscribe((pagination: PaginationModel)=> {
+      this.pageLength = pagination?.length || 0;
+      this.dataSource$ = this.entityService.entities$.pipe(map(entities => entities.slice(0, this.paginator?.pageSize || environment.pageSize)));
+    });
+
+  }
+
+  openDeleteConfirmation(person: PeopleModel): void {
+    this.confirmDialogService.open('Do you confirm deleting ' + person.name + '?', '410px')
+      .afterClosed().subscribe((answer: boolean) => {
+        if (answer) {
+          this.delete(person);
+        }
+      });
+  }
+
+  delete(person: PeopleModel) {
+    this.entityService.delete(person).subscribe(() => {
+        this.loadingSpinner.removeLoading();
+        this.notificationService.show({ severity: 'info', detail: 'person deleted', life: 4000 });
+      }, (error: HttpErrorResponse) => {
+        this.loadingSpinner.removeLoading();
+        this.notificationService.show({ severity: 'error', detail: 'error deleting person: ' + person.name, life: 4000 });
+      });
+  }
+
+  onEnterKey(event: any){
+    event.target.blur()
+  }
+
+  ngOnDestroy(): void {
+    this.filterService.filterValues = [];
+  }
+
+}
