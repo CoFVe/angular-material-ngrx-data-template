@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
-import { DepartmentStoreModule } from '@/app/common/store/department-store.module';
+import { DepartmentStoreModule } from '@/app/departments/modules/department-store.module';
 import { DepartmentsEditorModule } from '../../components/departments-editor/departments-editor.module';
 import { DepartmentsDetailsDialogComponent } from '../../components/departments-details-dialog/departments-details-dialog.component';
 

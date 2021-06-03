@@ -1,7 +1,7 @@
 import { TestBed, inject, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { AuthGuard } from '../auth.guard';
+import { AuthGuard } from '../../../app/common/guard/auth.guard';
 
 describe('AuthGuard', () => {
   beforeEach(() => {

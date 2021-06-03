@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { DictionaryMap } from '@/app/common/models/base/dictionary-map.type';
+import { DictionaryMap } from '@/app/common/models/dictionary-map.type';
 import { NotificationService } from '../components/notification-message/notification.service';
 import { LoggerService } from '../services/logger.service';
 import { Message } from '../components/notification-message/message';

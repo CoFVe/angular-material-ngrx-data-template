@@ -31,7 +31,7 @@ import { LoadingSpinnerModule } from './common/components/loading-spinner/loadin
 import { NotificationMessageModule } from './common/components/notification-message/notification-message.module';
 import { LoadingSpinnerService } from './common/components/loading-spinner/loading-spinner.service';
 import { NotificationService } from './common/components/notification-message/notification.service';
-import { DepartmentStoreModule } from './common/store/department-store.module';
+import { DepartmentStoreModule } from './departments/modules/department-store.module';
 import { LoggerService } from './common/services/logger.service';
 import { entityConfig } from './common/store/entity-metadata';
 import { reducers } from './common/store/reducers/app.reducers';

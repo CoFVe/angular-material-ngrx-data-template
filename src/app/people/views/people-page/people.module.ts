@@ -25,7 +25,7 @@ import { TableUpdaterModule } from '@/app/common/components/table-updater/table-
 import { FilterService } from '@/app/common/services/filter.service';
 import { LoadingSpinnerModule } from '@/app/common/components/loading-spinner/loading-spinner.module';
 import { PeopleEditorModule } from '../../components/people-editor/people-editor.module';
-import { PeopleStoreModule } from '@/app/common/store/people-store.module';
+import { PeopleStoreModule } from '@/app/people/modules/people-store.module';
 
 @NgModule({
   imports: [
