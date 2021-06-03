@@ -17,7 +17,7 @@ import { AuthModule } from './auth/common/modules/auth.module';
 import { StorageModule } from '@ngx-pwa/local-storage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
-import { HttpApiTokenInterceptorModule } from './auth/interceptors/http-api-token-interceptor.module';
+import { HttpApiTokenInterceptorModule } from './auth/common/interceptors/http-api-token-interceptor.module';
 import { HttpApiVersionInterceptorModule } from './common/interceptors/http-api-version-interceptor.module';
 import { HttpErrorInterceptorModule } from './common/interceptors/http-error-interceptor.module';
 import { HttpResultPaginationInterceptorModule } from './common/interceptors/http-result-pagination-interceptor.module';

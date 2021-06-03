@@ -27,25 +27,10 @@
       "@app/*": [
         "src/app/*"
       ],
-      "@views/*": [
-        "src/app/views/*"
+      "@common/*": [
+        "src/app/common/*"
       ],
-      "@models/*": [
-        "src/app/departments/models/*"
-      ],
-      "@services/*": [
-        "src/app/departments/services/*"
-      ],
-      "@adapters/*": [
-        "src/app/common/adapters/*"
-      ],
-      "@components/*": [
-        "src/app/components/*"
-      ],
-      "@store/*": [
-        "src/app/store/*"
-      ],
-      "@environment": [ "src/environments/environment"]
+      "@environment": ["src/environments/environment"]
     }
   },
   "angularCompilerOptions": {

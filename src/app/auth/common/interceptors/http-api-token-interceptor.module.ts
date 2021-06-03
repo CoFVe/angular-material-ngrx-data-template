@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpApiTokenInterceptor } from './http-api-token.interceptor';
-import { AuthService } from '../common/services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @NgModule({
     imports: [
