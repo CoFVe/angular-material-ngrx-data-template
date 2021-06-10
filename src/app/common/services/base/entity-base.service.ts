@@ -1,11 +1,15 @@
-import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory, QueryParams } from '@ngrx/data';
+import { EntityCollectionDataService, EntityCollectionServiceBase, EntityCollectionServiceElementsFactory, EntityDataService, QueryParams } from '@ngrx/data';
 import { Observable, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
 export class EntityBaseService<T> extends EntityCollectionServiceBase<T> {
-  constructor(entityName: string, serviceElementsFactory: EntityCollectionServiceElementsFactory) {
+  dataAdapter: EntityCollectionDataService<T>;
+
+  constructor(entityName: string, serviceElementsFactory: EntityCollectionServiceElementsFactory, entityDataService: EntityDataService) {
     super(entityName, serviceElementsFactory);
+    this.dataAdapter = entityDataService.getService(entityName) as EntityCollectionDataService<T>;
   }
+
   /**
      * Dispatch action to query inmemory storage first,
      * if note elemetns are found, then fetch the remote storage for the entities that satisfy a query expressed

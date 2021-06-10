@@ -67,6 +67,15 @@ export class HttpClientAdapter<T> implements EntityCollectionDataService<T> {
       return this.updateInStorage(entity);
   }
 
+  executeCustomAction(entity: T | any, actionName: string){
+    return this.storage.post<T>(environment.serviceUrl + '/' + this.name + '/' + actionName, entity, {
+      headers: new HttpHeaders().append('NgrxEntity', this.name)
+    })
+    .pipe(tap((response) => {
+      this.logger.debug('httpClient post ' + JSON.stringify(entity) + ' with response: ' + JSON.stringify(response))
+    }));
+  }
+
   protected deleteFromStorage(id: string | number): Observable<T | any> {
     return this.storage.delete(environment.serviceUrl + '/' + this.name + '/' + id, {
         headers: new HttpHeaders().append('NgrxEntity', this.name)
@@ -106,4 +115,6 @@ export class HttpClientAdapter<T> implements EntityCollectionDataService<T> {
       this.logger.debug('httpClient patch ' + JSON.stringify(entity) + ' with response: ' + JSON.stringify(response))
     }));
   }
+
+
 }
