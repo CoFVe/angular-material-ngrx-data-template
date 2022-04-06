@@ -14,7 +14,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UncaughtExceptionHandler } from './handlers/uncaught-exception.handler';
 import { LoggerService } from '@services/logger.service';
 import { environment } from '@environment';
-import { LoggerModule } from 'ngx-logger';
+import { LoggerModule } from "ngx-logger";
 import { reducers } from './store/reducers/app.reducers';
 import { metaReducers } from './store/reducers/app-meta.reducers';
 import { AuthModule } from './auth/auth.module';

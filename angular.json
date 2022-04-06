@@ -92,7 +92,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-material-ngrx-data-template:build"
+            "browserTarget": "angular-material-ngrx-data-template:build:local"
           },
           "configurations": {
             "local": {

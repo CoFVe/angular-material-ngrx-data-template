@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { environment as defaultEnvironment } from './environment.default';
-import { LoggerConfig, NgxLoggerLevel } from 'ngx-logger';
+import { NgxLoggerLevel } from 'ngx-logger';
 import { OidcClientSettings, Profile, User } from 'oidc-client';
 
 export const environment = {
@@ -12,7 +12,7 @@ export const environment = {
   oidcConfig: {
     ...defaultEnvironment.oidcConfig
   } as OidcClientSettings,
-  loggerConfig: { level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.OFF } as LoggerConfig,
+  loggerConfig: { level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.OFF },
   serviceUrl: 'http://localhost:3000',
   testUsers: [
     {
