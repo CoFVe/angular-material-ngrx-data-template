@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@app/auth/auth.guard';
-import { DashboardModule } from './views/dashboard/dashboard.module';
-import { LoginPageModule } from './views/login/login-page.module';
+import { AuthGuard } from '@/app/common/guard/auth.guard';
+import { LoginPageModule } from './auth/login/views/login-page/login-page.module';
+import { DashboardModule } from './dashboard/views/dashboard-page/dashboard.module';
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'auth-callback',
-    loadChildren: () => import('./views/auth-callback/auth-callback.module').then(m => m.AuthCallbackModule)
+    loadChildren: () => import('./auth/login/views/auth-callback/auth-callback.module').then(m => m.AuthCallbackModule)
   },
   {
     path: 'login',
@@ -24,15 +24,15 @@ const routes: Routes = [
   },
   {
     path: 'error',
-    loadChildren: () => import('./views/server-error/server-error.module').then(m => m.ServerErrorModule)
+    loadChildren: () => import('./error-pages/views/server-error/server-error.module').then(m => m.ServerErrorModule)
   },
   {
     path: 'access-denied',
-    loadChildren: () => import('./views/access-denied/access-denied.module').then(m => m.AccessDeniedModule)
+    loadChildren: () => import('./error-pages/views/access-denied/access-denied.module').then(m => m.AccessDeniedModule)
   },
   {
     path: 'not-found',
-    loadChildren: () => import('./views/not-found/not-found.module').then(m => m.NotFoundModule)
+    loadChildren: () => import('./error-pages/views/not-found/not-found.module').then(m => m.NotFoundModule)
   },
   { path: '**', redirectTo: 'not-found' }
 ];
