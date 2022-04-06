@@ -57,6 +57,18 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.local.ts"
+                },
+                {
+                  "replace": "src/app/common/store/reducers/no-logger-meta.reducer.ts",
+                  "with": "src/app/common/store/reducers/logger-meta.reducer.ts"
+                },
+                {
+                  "replace": "src/app/common/modules/store-devtools.module.ts",
+                  "with": "src/app/common/modules/dev-store-devtools.module.ts"
+                },
+                {
+                  "replace": "src/app/common/modules/store-runtimechecks.module.ts",
+                  "with": "src/app/common/modules/dev-store-runtimechecks.module.ts"
                 }
               ]
             },
@@ -92,7 +104,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-material-ngrx-data-template:build"
+            "browserTarget": "angular-material-ngrx-data-template:build:local"
           },
           "configurations": {
             "local": {

@@ -1,4 +1,4 @@
-import { LoggerConfig, NgxLoggerLevel } from "ngx-logger";
+import { NgxLoggerLevel } from "ngx-logger";
 import { OidcClientSettings } from "oidc-client";
 
 // environment.defaults.ts
@@ -6,7 +6,7 @@ export const environment = {
   local: false,
   production: false,
   staging: false,
-  loggerConfig: { level: NgxLoggerLevel.TRACE, serverLogLevel: NgxLoggerLevel.OFF } as LoggerConfig,
+  loggerConfig: { level: NgxLoggerLevel.TRACE, serverLogLevel: NgxLoggerLevel.OFF },
   oidcConfig: {
     validateAuthority: true,
     storeAuthStateInCookie: false,

@@ -7,7 +7,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppComponent } from '@app/app.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { UncaughtExceptionHandler } from './common/handlers/uncaught-exception.handler';
@@ -21,21 +20,19 @@ import { HttpApiTokenInterceptorModule } from './auth/common/interceptors/http-a
 import { HttpApiVersionInterceptorModule } from './common/interceptors/http-api-version-interceptor.module';
 import { HttpErrorInterceptorModule } from './common/interceptors/http-error-interceptor.module';
 import { HttpResultPaginationInterceptorModule } from './common/interceptors/http-result-pagination-interceptor.module';
-import { OidcUserStoreModule } from '@/app/auth/user/modules/oidc-user-store.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './common/components/confirmation-dialog/confirmation-dialog.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { ConfirmationDialogModule } from './common/components/confirmation-dialog/confirmation-dialog.module';
 import { LoadingSpinnerModule } from './common/components/loading-spinner/loading-spinner.module';
-import { NotificationMessageModule } from './common/components/notification-message/notification-message.module';
 import { LoadingSpinnerService } from './common/components/loading-spinner/loading-spinner.service';
 import { NotificationService } from './common/components/notification-message/notification.service';
-import { DepartmentStoreModule } from './departments/modules/department-store.module';
 import { LoggerService } from './common/services/logger.service';
-import { entityConfig } from './common/store/entity-metadata';
 import { reducers } from './common/store/reducers/app.reducers';
 import { metaReducers } from './common/store/reducers/app-meta.reducers';
+import { OidcUserModule } from './auth/user/modules/oidc-user.module';
+import { DepartmentModule } from './departments/modules/department.module';
+import { PeopleModule } from './people/views/people-page/people.module';
+import { NgrxStoreModule } from './common/modules/ngrx-store.module';
 
 @NgModule({
   declarations: [
@@ -51,42 +48,16 @@ import { metaReducers } from './common/store/reducers/app-meta.reducers';
     TranslateModule.forRoot({ loader: { provide: TranslateLoader, useFactory: (http: HttpClient) => { return new TranslateHttpLoader(http, "./assets/i18n/", ".json"); }, deps: [HttpClient], }, }),
     StorageModule.forRoot({ IDBNoWrap: true }),
     AuthModule.forRoot(),
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      },
-      initialState: {
-        router: {
-          state: {
-            url: window.location.pathname,
-            params: {},
-            queryParams: {}
-          },
-          navigationId: 0
-        }
-      }
-    }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([]),
-    EntityDataModule.forRoot(entityConfig),
-    StoreRouterConnectingModule.forRoot({
-      stateKey: 'router',
-      routerState: RouterState.Minimal
-    }),
     HttpResultPaginationInterceptorModule.forRoot(),
     HttpErrorInterceptorModule.forRoot(),
     HttpApiVersionInterceptorModule.forRoot(),
     HttpApiTokenInterceptorModule.forRoot(),
     NgxPermissionsModule.forRoot(),
-    MatProgressSpinnerModule,
-    OidcUserStoreModule,
-    MatDialogModule,
-    DepartmentStoreModule,
+    NgrxStoreModule,
     LoadingSpinnerModule,
-    NotificationMessageModule,
-    ConfirmationDialogModule
+    OidcUserModule,
+    DepartmentModule,
+    PeopleModule
   ],
   providers: [
     LoadingSpinnerService,
