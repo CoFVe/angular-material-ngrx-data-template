@@ -16,7 +16,6 @@ import { HttpApiVersionInterceptorModule } from './common/interceptors/http-api-
 import { HttpErrorInterceptorModule } from './common/interceptors/http-error-interceptor.module';
 import { HttpResultPaginationInterceptorModule } from './common/interceptors/http-result-pagination-interceptor.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ConfirmationDialogComponent } from './common/components/confirmation-dialog/confirmation-dialog.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { LoadingSpinnerModule } from './common/components/loading-spinner/loading-spinner.module';
 import { LoadingSpinnerService } from './common/components/loading-spinner/loading-spinner.service';
@@ -59,7 +58,7 @@ import { NgrxStoreModule } from './common/modules/ngrx-store.module';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    ConfirmationDialogComponent
+
   ]
 })
 export class AppModule { }
